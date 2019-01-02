@@ -1,0 +1,301 @@
+<?php
+
+namespace App\Http\Controllers;
+
+//use Illuminate\Validation\Validator;
+use App\Photo;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+//use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Contracts\Validation\Factory;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use App\Comment;
+use App\Message;
+use phpDocumentor\Reflection\Types\Null_;
+use Response;
+use Symfony\Component\Filesystem\Exception\IOException;
+use function Symfony\Component\VarDumper\Tests\Caster\reflectionParameterFixture;
+//use Zend\InputFilter\Input;
+use Illuminate\Support\Facades\Input;
+use Auth;
+use Illuminate\Contracts\Auth\Guard;
+
+use App\Repositories\ImageRepository;
+use Carbon\Carbon;
+use File;
+use Storage;
+use DateTime;
+use App\User;
+use App\Girl;
+use App\Services;
+use App\DemoMail;
+use App\Region;
+use App\City;
+use App\Country;
+use Mail;
+use settype;
+use Hash;
+use App\Mail\Reminder;
+
+//use Uts\HotelBundle\Entity\Country;
+
+
+class AnketController extends Controller
+{
+    function index()
+    {
+     echo "index";
+    }
+
+    public function girlsShowAuchAnket(Request $request)
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $user_id = $user->id;
+            $girl = Girl::select([
+                'id',
+                'name',
+                'login',
+                'email',
+                'phone',
+                'main_image',
+                'description',
+                'money',
+                'beginvip',
+                'endvip'
+            ])->where('user_id', $user_id)->first();
+            if ($girl == null) {
+                $requwest = new Request();
+                return $this->createGirl($requwest);
+            }
+            $id = $girl->id;
+            /*тут рассичаем на сколько дней уму випа хватит*/
+            $price_toTop = collect(DB::select('select price from servises where name=\'toTop\' '))->first(); //получили цену
+            $money = collect(DB::select('select money from users where id=? ', [$user_id]))->first(); //получили цену
+
+            $maxDay = $money->money / $price_toTop->price;
+            $maxDay = floor($maxDay);
+            $priceFirstPlase = collect(DB::select('select price from servises where name=\'toFirstPlase\' '))->first();
+            $priceTop = collect(DB::select('select price from servises where name=\'toTop\' '))->first();
+            $images = Photo::select(['id', 'photo_name'])->where('girl_id', $id)->get();
+            return view('powerView')->with([
+                'girl' => $girl,
+                'images' => $images,
+                'user' => $user,
+                'max_day' => $maxDay,
+                'priceFirstPlase' => $priceFirstPlase,
+                'priceTop' => $priceTop
+            ]);
+        } else {
+            return redirect('/girls');
+        }
+    }
+
+
+    function createGirl(Request $request)
+    {
+        $serveses = null;
+        //   echo 'test';
+        $user = Auth::user();
+        if (Auth::guest()) {
+            return redirect('/login');
+        }
+        $girl = Girl::select([
+            'name',
+            'email',
+            'password',
+            'id',
+            'phone',
+            'description',
+            'enabled',
+            'payday',
+            'payed',
+            'login',
+            'main_image',
+            'sex',
+            'meet',
+            'weight',
+            'height',
+            'age'
+        ])
+            ->where('user_id', $user->id)->first();
+        if ($girl != null) {
+            $rewest = new Request();
+            return $this->girlsShowAuchAnket($rewest);
+        }
+        if (Auth::guest()) {
+            return redirect('/login');
+        }
+        if ($user->akcept == 0) {
+            return view('rules');
+        }
+        if ($user->is_conferd == 0) {
+            return view('conferntEmail')->with(['email' => $user->email]);
+        }
+
+        if ($user->phone == null) {
+            return view('inputphone');
+        }
+        if ($user->phone_conferd == 0) {
+            return view('inputphone');
+        }
+        //проверяем, вдруг анкета уже есть.
+        if ($girl != null) {
+            return $this->index();
+        }
+
+
+        $phone = $user->phone;
+        $countries = collect(DB::select('select * from countries')); //получаем страны
+
+        //получаем регионы
+        $regions = collect(DB::select('select * from regions where id_country=1')); //получаем страны
+
+        $cities = collect(DB::select('select * from cities where id_region=1'));
+
+        $title = "Создание анкеты";
+        return view('createGirl')->with([
+                'servises' => $serveses,
+                'title' => $title,
+                'phone' => $phone,
+                'countries' => $countries,
+                'regions' => $regions,
+                'cities' => $cities
+            ]
+        );
+    }
+
+    public function Store(Request $request)
+    {
+
+        // для начала проверим, есть ли созданная этим юзером анкета.
+        $validatedData = $request->validate([
+            'name' => 'required',
+
+            'sex' => 'required',
+            //'height'=>'required',
+            'age' => 'required|numeric|min:18',
+            'met' => 'required',
+            'description' => 'required',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+        ]);
+
+        $user = Auth::user();
+
+        if (Auth::guest()) {
+            return redirect('/login');
+        }
+
+        $girl = Girl::select([
+            'name',
+            'email',
+            'password',
+            'id',
+            'phone',
+            'description',
+            'enabled',
+            'payday',
+            'payed',
+            'login',
+            'main_image',
+            'sex',
+            'meet',
+            'weight',
+            'height',
+            'age'
+        ])
+            ->where('user_id', $user->id)->first();
+        if ($girl != null) {
+            $rewest = new Request();
+            return $this->girlsShowAuchAnket($rewest);
+        }
+
+
+        if ($request->has('famele')) {
+            $sex = 'famele';
+        }
+        if ($request->has('male')) {
+            $sex = 'male';
+        }
+
+        if (Input::hasFile('file')) {
+            $image_extension = $request->file('file')->getClientOriginalExtension();
+            $image_new_name = md5(microtime(true));
+            $temp_file = base_path() . '/public/images/upload/' . strtolower($image_new_name . '.' . $image_extension);// кладем файл с новыс именем
+            $request->file('file')
+                ->move(base_path() . '/public/images/upload/', strtolower($image_new_name . '.' . $image_extension));
+            $origin_size = getimagesize($temp_file);
+        }
+
+        $data = $request->all();
+        $girl = new Girl();
+        $girl->fill($data);
+        $girl['main_image'] = $image_new_name . '.' . $image_extension;
+        $girl['enabled'] = true;
+        $id = Auth::user()->id;
+        $girl['user_id'] = $id;
+        $girl['age'] = $request['age'];
+        $girl['sex'] = $request['sex'];
+
+        $girl['meet'] = $request['met'];
+        //встречи
+        //местоположение
+
+        $girl->save();
+
+        if ($request->has('country')) {
+            $country = $request['country'];
+            if ($country == "-") {
+                $country = null;
+            }
+            DB::table('girls')->where('id', $girl->id)->update(['country_id' => $country]);
+        }
+
+        if ($request->has('region')) {
+            $region = $request['region'];
+
+            if ($region == "-") {
+                $region = null;
+            }
+            if ($region != null) {
+                $girl['region_id'] = $region;
+            }
+            DB::table('girls')->where('id', $girl->id)->update(['region_id' => $region]);
+        }
+
+
+        if ($request->has('city')) {
+            if ($request['city'] != null) {
+                $city = $request['city'];
+                if ($city == "-") {
+                    $city = null;
+                };
+                DB::table('girls')->where('id', $girl->id)->update(['city_id' => $city]);
+            }
+        }
+
+
+// регион
+
+        $girl->save();
+
+        if (Input::hasFile('images')) {
+            $count = 0;
+            foreach ($request->images as $key) {
+                $image_extension = $request->file('file')->getClientOriginalExtension();
+                $image_new_name = md5(microtime(true));
+                $key->move(public_path() . '/images/upload/', strtolower($image_new_name . '.' . $image_extension));
+                $id = $girl['id'];
+                $photo = new Photo();
+                $photo['photo_name'] = $image_new_name . '.' . $image_extension;
+                $photo['girl_id'] = $id;
+                $photo->save();
+
+            }
+        }
+        return redirect('/girls');
+    }
+}
