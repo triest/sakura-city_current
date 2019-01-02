@@ -93,6 +93,9 @@
         <br>
 
         <br>
+        <!--что-бы лишний раз не меняли -->
+        <br>
+        <br>
         <label>Страна:
             <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
                 <option value="{{$country->id_country}}" selected>{{$country->name}}</option>
@@ -107,7 +110,7 @@
             <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region">
                 <option value="-">-</option>
                 @if($region!=null)
-                <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
+                    <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
                 @endif
                 @foreach($regions as $region)
                     <option value="{{$region->id_region}}">{{$region->name}}</option>
@@ -118,18 +121,16 @@
         <label>Город:
             <select id="city" class="city" style="width: 200px" name="city">
                 @if($city!=null)
-                <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
+                    <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
                 @endif
                 <option value="-">-</option>
-                @foreach($cityes as $city2)
-                    <option value="{{$city2->id_city}}">{{$city2->name}}</option>
+                @foreach($cityes as $city)
+                    <option value="{{$city->id_city}}">{{$city->name}}</option>
                 @endforeach
             </select>
         </label>
         <script>
-
             $('#country').on('change', function (e) {
-
                 var country_id = e.target.value;
                 console.log(country_id);
                 //ajax
@@ -138,9 +139,7 @@
                 $('#city').empty();
                 $('#region').append('<option value="-">-</option>');
                 $('#city').append('<option value="-">-</option>');
-
                 $.get('/findRegions?country_id=' + country_id, function (data) {
-
                     $.each(data, function (index, subcatObj) {
                         //  console.log(subcatObj.name)
                         $('#region').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
@@ -148,14 +147,11 @@
                 })
                 var region_id = e.target.value;
                 console.log(region_id);
-
             })
-
             $('#region').on('change', function (e) {
                 var region_id = e.target.value;
                 $('#city').empty();
                 $('#city').append('<option value="-">-</option>');
-
                 $.get('/findCitys?region_id=' + region_id, function (data) {
                     $('#city').empty();
                     $.each(data, function (index, subcatObj) {
@@ -163,8 +159,6 @@
                     })
                 })
             })
-
-
         </script>
         <br>
         <div class="form-group">
@@ -192,7 +186,6 @@
                     });
                 });
             });
-
         </script>
 
         <script type="text/javascript" src="{{ asset('public/js/tinymce/tinymce.min.js') }}"></script>
@@ -213,11 +206,9 @@
                 }
                 return true;
             }
-
             function isNumber2(evt) {
                 evt = (evt) ? evt : window.event;
                 return false;
-
             }
         </script>
         <button type="submit" class="btn btn-default">Сохранить изменения</button>
