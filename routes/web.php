@@ -195,13 +195,13 @@ Route::get('/findCitys', function () {
 
 Route::get('/findCitys2', function () {
     $id = Input::get('region_id');
-
+ //  dump($id);
     $region= collect(DB::select('select * from regions where id_region=?',
         [$id]));
-
+ //   dump($region);
     $city = collect(DB::select('SELECT * FROM `cities` WHERE `id_region`=? ',
-        [$region[0]->id_region]));
-   
+        [$id]));
+ //   dump($city);
     return Response::json($city);
 });
 

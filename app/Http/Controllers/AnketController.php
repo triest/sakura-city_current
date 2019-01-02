@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 //use Illuminate\Validation\Validator;
 use App\Photo;
 use Illuminate\Support\Facades\Validator;
@@ -35,6 +37,7 @@ use Mail;
 use settype;
 use Hash;
 use App\Mail\Reminder;
+
 //use Uts\HotelBundle\Entity\Country;
 class AnketController extends Controller
 {
@@ -42,6 +45,7 @@ class AnketController extends Controller
     {
         echo "index";
     }
+
     public function girlsShowAuchAnket(Request $request)
     {
         if (Auth::check()) {
@@ -84,6 +88,7 @@ class AnketController extends Controller
             return redirect('/girls');
         }
     }
+
     function createGirl(Request $request)
     {
         $serveses = null;
@@ -150,6 +155,7 @@ class AnketController extends Controller
             ]
         );
     }
+
     public function Store(Request $request)
     {
         // для начала проверим, есть ли созданная этим юзером анкета.
@@ -257,6 +263,7 @@ class AnketController extends Controller
         }
         return redirect('/girls');
     }
+
     public function galarayView(Request $request)
     {
         $user = Auth::user();
@@ -291,6 +298,7 @@ class AnketController extends Controller
         $images = Photo::select(['id', 'photo_name'])->where('girl_id', $girl->id)->get();
         return view('editImage')->with(['girl' => $girl, 'images' => $images]);
     }
+
     public function deleteImage($id)
     {
         $user = Auth::user();
@@ -341,6 +349,7 @@ class AnketController extends Controller
         $requwest = new Request();
         return $this->galarayView($requwest);
     }
+
     public function uploadimage(Request $request)
     {
         $validatedData = $request->validate([
@@ -390,6 +399,7 @@ class AnketController extends Controller
         $requwest = new Request();
         return $this->galarayView($requwest);
     }
+
     public function girlsEditAuchAnket()
     {
         if (Auth::guest()) {
@@ -447,6 +457,7 @@ class AnketController extends Controller
             'country' => $country
         ]);
     }
+
     public function edit(Request $request)
     {
         $validatedData = $request->validate([
@@ -457,7 +468,7 @@ class AnketController extends Controller
             'description' => 'required',
             'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        dump($request);
+
         if (Auth::guest()) {
             return redirect('/login');
         }
@@ -509,22 +520,51 @@ class AnketController extends Controller
             $origin_size = getimagesize($temp_file);
         }
         //тут местоположее
+        dump($request);
 
-        $region= collect(DB::select('select * from regions where id_region=?',
-            [$request->region]));
-        dump($region);
+        //country
+        if ($request->country == '-') {
+            $girl->country_id = null;
+            $girl->save();
+        } else {
+            $country = collect(DB::select('select * from countries where id_country=?',
+                [$request->country]));
+            $girl->country_id = $country[0]->id_country;
+            $girl->save();
+        }
 
-        $girl->region_id=$region[0]->id;
-        $city=collect(DB::select('select * from cities where id_city=?',
-            [$request->city]));
-        dump($city);
-        $girl->city_id=$city[0]->id;
+        //region
+        if ($request->region == '-') {
+            $girl->region_id = null;
+            $girl->save();
+        } else {
+            $region = collect(DB::select('select * from regions where id_region=?',
+                [$request->region]));
+            $girl->region_id = $region[0]->id;
+        }
+
+        //city
+        if ($request->city == '-') {
+            $girl->city_id = null;
+            $girl->save();
+        } else {
+            $region = collect(DB::select('select * from cities where id_city=?',
+                [$request->city]));
+            dump($region);
+           
+            $arr = (array)$region;
+            if (!empty($arr)) {
+                $girl->city_id = $region[0]->id;
+            }
+             else{
+
+             }
+            $girl->save();
+        }
+
 
         $girl->save();
-
-
-
-    //    return $this->girlsEditAuchAnket();
+        //    return $this->girlsEditAuchAnket();
         return redirect('/anket');
     }
 }
