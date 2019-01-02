@@ -423,7 +423,6 @@ class AnketController extends Controller
         if ($girl == null) {
             return $this->index();
         }
-        dump($girl);
         $phone = $user->phone;
         $countries = collect(DB::select('select * from countries'));
         $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',

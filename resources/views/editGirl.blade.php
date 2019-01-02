@@ -153,7 +153,7 @@
                 $('#city').empty();
                 $('#city').append('<option value="-">-</option>');
                 $.get('/findCitys?region_id=' + region_id, function (data) {
-                    $('#city').empty();
+                   
                     $.each(data, function (index, subcatObj) {
                         $('#city').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
                     })

@@ -278,4 +278,4 @@ Route::get('/messages/{girl_id}', 'MessageController@getMessagePageAdmin')->name
 
 Route::get('/usersList', 'AdminController@usersList')->name('usersList');
 Route::get('/messageList', 'MessagesController@messagesList')->name('messageList');
-Route::get('/moneyHistory', 'GirlsController@moneyHistory')->name('moneyHistory');
+Route::get('/moneyHistory', 'AdminController@moneyHistory')->name('moneyHistory');
