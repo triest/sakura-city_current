@@ -543,7 +543,8 @@ class AnketController extends Controller
             $girl->region_id = $region[0]->id;
         }
 
-        //city
+        //city]
+
         if ($request->city == '-') {
             $girl->city_id = null;
             $girl->save();
@@ -551,13 +552,16 @@ class AnketController extends Controller
             $region = collect(DB::select('select * from cities where id_city=?',
                 [$request->city]));
             dump($region);
-           
+
             $arr = (array)$region;
+            dump($arr);
+            die();
             if (!empty($arr)) {
+
                 $girl->city_id = $region[0]->id;
             }
              else{
-
+                die();
              }
             $girl->save();
         }
