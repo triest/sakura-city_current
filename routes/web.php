@@ -192,6 +192,19 @@ Route::get('/findCitys', function () {
     return Response::json($city);
 });
 
+
+Route::get('/findCitys2', function () {
+    $id = Input::get('region_id');
+
+    $region= collect(DB::select('select * from regions where id_region=?',
+        [$id]));
+
+    $city = collect(DB::select('SELECT * FROM `cities` WHERE `id_region`=? ',
+        [$region[0]->id_region]));
+   
+    return Response::json($city);
+});
+
 Route::get('/inputPhone2', function () {
     $serveses = null;
     //   echo 'test';

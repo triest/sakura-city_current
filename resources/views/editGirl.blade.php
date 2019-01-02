@@ -129,6 +129,7 @@
         </label>
         <script>
             $('#country').on('change', function (e) {
+
                 var country_id = e.target.value;
                 console.log(country_id);
                 //ajax
@@ -137,7 +138,9 @@
                 $('#city').empty();
                 $('#region').append('<option value="-">-</option>');
                 $('#city').append('<option value="-">-</option>');
+
                 $.get('/findRegions?country_id=' + country_id, function (data) {
+
                     $.each(data, function (index, subcatObj) {
                         //  console.log(subcatObj.name)
                         $('#region').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
@@ -145,18 +148,24 @@
                 })
                 var region_id = e.target.value;
                 console.log(region_id);
+
             })
+
             $('#region').on('change', function (e) {
                 var region_id = e.target.value;
                 $('#city').empty();
                 $('#city').append('<option value="-">-</option>');
-                $.get('/findCitys?region_id=' + region_id, function (data) {
 
+                $.get('/findCitys2?region_id=' + region_id, function (data) {
+                    $('#city').empty();
                     $.each(data, function (index, subcatObj) {
+                        console.log(subcatObj)
                         $('#city').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
                     })
                 })
             })
+
+
         </script>
         <br>
         <div class="form-group">

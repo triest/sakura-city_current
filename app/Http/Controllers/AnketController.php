@@ -457,6 +457,7 @@ class AnketController extends Controller
             'description' => 'required',
             'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        dump($request);
         if (Auth::guest()) {
             return redirect('/login');
         }
@@ -511,13 +512,16 @@ class AnketController extends Controller
 
         $region= collect(DB::select('select * from regions where id_region=?',
             [$request->region]));
+        dump($region);
 
         $girl->region_id=$region[0]->id;
         $city=collect(DB::select('select * from cities where id_city=?',
             [$request->city]));
-
+        dump($city);
         $girl->city_id=$city[0]->id;
+
         $girl->save();
+
 
 
     //    return $this->girlsEditAuchAnket();
