@@ -472,24 +472,20 @@ class AnketController extends Controller
         if ($girl == null) {
             return $this->index();
         }
-        dump($girl);
         $phone = $user->phone;
         $countries = collect(DB::select('select * from countries'));
-
         $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
             [$girl->country_id]));
-
         $region = collect(DB::select('select * from regions where id=?',
             [$girl->region_id]))->first(); //получаем страны
-
         $city = collect(DB::select('select * from cities where id=?',
             [$girl->city_id]))->first();
-
-
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
         $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$girl->region_id]));
-        dump($region);
+        dump($girl);
+        dump($cityes);
+       
         return view('editGirl')->with([
             'girl' => $girl,
             'phone' => $phone,
@@ -571,38 +567,37 @@ class AnketController extends Controller
         }
 
 
-            //тут местоположее
-            if ($request->has('country')) {
-                $country = $request['country'];
-                if ($country == "-") {
-                    $country = null;
-                }
-                DB::table('girls')->where('id', $girl->id)->update(['country_id' => $country]);
+        //тут местоположее
+        if ($request->has('country')) {
+            $country = $request['country'];
+            if ($country == "-") {
+                $country = null;
             }
+            DB::table('girls')->where('id', $girl->id)->update(['country_id' => $country]);
+        }
 
-            if ($request->has('region')) {
-                $region = $request['region'];
+        if ($request->has('region')) {
+            $region = $request['region'];
 
-                if ($region == "-") {
-                    $region = null;
-                }
-                if ($region != null) {
-                    $girl['region_id'] = $region;
-                }
-                DB::table('girls')->where('id', $girl->id)->update(['region_id' => $region]);
+            if ($region == "-") {
+                $region = null;
             }
-
-
-            if ($request->has('city')) {
-                if ($request['city'] != null) {
-                    $city = $request['city'];
-                    if ($city == "-") {
-                        $city = null;
-                    };
-                    DB::table('girls')->where('id', $girl->id)->update(['city_id' => $city]);
-                }
+            if ($region != null) {
+                $girl['region_id'] = $region;
             }
+            DB::table('girls')->where('id', $girl->id)->update(['region_id' => $region]);
+        }
 
+
+        if ($request->has('city')) {
+            if ($request['city'] != null) {
+                $city = $request['city'];
+                if ($city == "-") {
+                    $city = null;
+                };
+                DB::table('girls')->where('id', $girl->id)->update(['city_id' => $city]);
+            }
+        }
 
 
         return $this->girlsEditAuchAnket();

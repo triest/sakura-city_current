@@ -93,9 +93,6 @@
         <br>
 
         <br>
-        <!--что-бы лишний раз не меняли -->
-         <br>
-        <br>
         <label>Страна:
             <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
                 <option value="{{$country->id_country}}" selected>{{$country->name}}</option>
@@ -124,8 +121,8 @@
                 <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
                 @endif
                 <option value="-">-</option>
-                @foreach($cityes as $city)
-                    <option value="{{$city->id_city}}">{{$city->name}}</option>
+                @foreach($cityes as $city2)
+                    <option value="{{$city2->id_city}}">{{$city2->name}}</option>
                 @endforeach
             </select>
         </label>
