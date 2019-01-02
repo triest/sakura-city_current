@@ -434,8 +434,9 @@ class AnketController extends Controller
             [$girl->city_id]))->first();
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
-        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$girl->region_id]));
-        dump($region);
+
+        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
+
         return view('editGirl')->with([
             'girl' => $girl,
             'phone' => $phone,
