@@ -508,32 +508,19 @@ class AnketController extends Controller
             $origin_size = getimagesize($temp_file);
         }
         //тут местоположее
-        if ($request->has('country')) {
-            $country = $request['country'];
-            if ($country == "-") {
-                $country = null;
-            }
-            DB::table('girls')->where('id', $girl->id)->update(['country_id' => $country]);
-        }
-        if ($request->has('region')) {
-            $region = $request['region'];
-            if ($region == "-") {
-                $region = null;
-            }
-            if ($region != null) {
-                $girl['region_id'] = $region;
-            }
-            DB::table('girls')->where('id', $girl->id)->update(['region_id' => $region]);
-        }
-        if ($request->has('city')) {
-            if ($request['city'] != null) {
-                $city = $request['city'];
-                if ($city == "-") {
-                    $city = null;
-                };
-                DB::table('girls')->where('id', $girl->id)->update(['city_id' => $city]);
-            }
-        }
-        return $this->girlsEditAuchAnket();
+
+        $region= collect(DB::select('select * from regions where id_region=?',
+            [$request->region]));
+
+        $girl->region_id=$region[0]->id;
+        $city=collect(DB::select('select * from cities where id_city=?',
+            [$request->city]));
+
+        $girl->city_id=$city[0]->id;
+        $girl->save();
+
+
+    //    return $this->girlsEditAuchAnket();
+        return redirect('/anket');
     }
 }

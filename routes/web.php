@@ -182,10 +182,14 @@ Route::get('/findRegions', function () {
 
 Route::get('/findCitys', function () {
     $id = Input::get('region_id');
-    $region = Region::where('id', '=', $id)->first();
-    $region_id = $region->id_region;
-    $citys = City::where('id_region', '=', $region_id)->get();
-    return Response::json($citys);
+ //   dump($id);
+    $region= collect(DB::select('select * from regions where id=?',
+        [$id]));
+   // dump($region);
+    $city = collect(DB::select('SELECT * FROM `cities` WHERE `id_region`=? ',
+        [$region[0]->id_region]));
+
+    return Response::json($city);
 });
 
 Route::get('/inputPhone2', function () {

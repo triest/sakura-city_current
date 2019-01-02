@@ -92,10 +92,8 @@
         @endif
         <br>
 
-        <br>
         <!--что-бы лишний раз не меняли -->
-        <br>
-        <br>
+
         <label>Страна:
             <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
                 <option value="{{$country->id_country}}" selected>{{$country->name}}</option>
@@ -153,7 +151,7 @@
                 $('#city').empty();
                 $('#city').append('<option value="-">-</option>');
                 $.get('/findCitys?region_id=' + region_id, function (data) {
-                   
+
                     $.each(data, function (index, subcatObj) {
                         $('#city').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
                     })
