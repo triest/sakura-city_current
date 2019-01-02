@@ -153,8 +153,8 @@ Route::post('/rules2', 'GirlsController@akceptRules')->name('aceptRules');
 //ввод телефона без ререхода
 //Route::get('/inputPhone2', 'GirlsController@inputPhone2')->name('inputMobilePhone2');
 
-Route::get('/user/anketa/edit/', 'GirlsController@girlsEditAuchAnket')->name('girlsEditAuchAnket');
-Route::post('/user/anketa/edit/', 'GirlsController@edit')->name('girlsEdit');
+Route::get('/user/anketa/edit/', 'AnketController@girlsEditAuchAnket')->name('girlsEditAuchAnket');
+Route::post('/user/anketa/edit/', 'AnketController@edit')->name('girlsEdit');
 
 //бот
 Route::get('/bot', 'GirlsController@bot')->name('bot');

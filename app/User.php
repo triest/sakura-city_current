@@ -44,9 +44,9 @@ class User extends Authenticatable
          $girl=Girl::select(['id','name','main_image','banned'])->where('user_id', $user_id)->first();
        // dump($girl);
         return $girl;
-
     }
 
+    
     public function anketisExsisUser($id){
 
         $user_id=$id;
