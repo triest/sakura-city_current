@@ -489,6 +489,7 @@ class AnketController extends Controller
 
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
+        dump($country);
 
         $region = Region::select('name', 'id_country', 'id_region')->where('id_region', $girl->region_id)->first();
 

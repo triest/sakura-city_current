@@ -101,10 +101,12 @@
         <label>Страна:
             <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country"
                     disabled>
+                <option value="{{$country->id_country}}" selected>{{$country->name}}</option>
                 <option value="-">-</option>
                 @foreach($countries as $contry)
                     <option value="{{$contry->id_country}}">{{$contry->name}}</option>
                 @endforeach
+
             </select>
         </label>
         <label>Регион:
@@ -120,6 +122,10 @@
         <label>Город:
             <select id="city" class="city" style="width: 200px" name="city" disabled>
                 <option value="-">-</option>
+                <option value=""></option>
+                @foreach($cityes as $city)
+                    <option value="{{$city->id_city}}">{{$city->name}}</option>
+                @endforeach
             </select>
         </label>
         <script>
