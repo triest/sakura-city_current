@@ -94,13 +94,10 @@
 
         <br>
         <!--что-бы лишний раз не меняли -->
-        <b>Изменить город: </b> <input type="checkbox" id="change" name="change"
-                                       onchange="document.getElementById(['country']).disabled = !this.checked;document.getElementById(['region']).disabled = !this.checked;document.getElementById(['city']).disabled = !this.checked;">
-        <br>
+         <br>
         <br>
         <label>Страна:
-            <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country"
-                    disabled>
+            <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
                 <option value="{{$country->id_country}}" selected>{{$country->name}}</option>
                 <option value="-">-</option>
                 @foreach($countries as $contry)
@@ -110,10 +107,11 @@
             </select>
         </label>
         <label>Регион:
-            <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region"
-                    disabled>
+            <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region">
                 <option value="-">-</option>
+                @if($region!=null)
                 <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
+                @endif
                 @foreach($regions as $region)
                     <option value="{{$region->id_region}}">{{$region->name}}</option>
                 @endforeach
@@ -121,8 +119,10 @@
         </label>
 
         <label>Город:
-            <select id="city" class="city" style="width: 200px" name="city" disabled>
+            <select id="city" class="city" style="width: 200px" name="city">
+                @if($city!=null)
                 <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
+                @endif
                 <option value="-">-</option>
                 @foreach($cityes as $city)
                     <option value="{{$city->id_city}}">{{$city->name}}</option>

@@ -472,11 +472,13 @@ class AnketController extends Controller
         if ($girl == null) {
             return $this->index();
         }
+        dump($girl);
         $phone = $user->phone;
         $countries = collect(DB::select('select * from countries'));
 
         $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
             [$girl->country_id]));
+
         $region = collect(DB::select('select * from regions where id=?',
             [$girl->region_id]))->first(); //получаем страны
 
@@ -486,8 +488,8 @@ class AnketController extends Controller
 
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
-        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
-
+        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$girl->region_id]));
+        dump($region);
         return view('editGirl')->with([
             'girl' => $girl,
             'phone' => $phone,
@@ -569,7 +571,6 @@ class AnketController extends Controller
         }
 
 
-        if ($request->has('change')) {
             //тут местоположее
             if ($request->has('country')) {
                 $country = $request['country'];
@@ -603,7 +604,7 @@ class AnketController extends Controller
             }
 
 
-        }
+
         return $this->girlsEditAuchAnket();
     }
 }
