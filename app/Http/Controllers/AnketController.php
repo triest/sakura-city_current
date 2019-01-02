@@ -431,7 +431,7 @@ class AnketController extends Controller
             $photo = new Photo();
             $girl = Girl::select('id')->where('user_id', $user->id)->first();
             $photo['photo_name'] = $image_new_name . '.' . $image_extension;
-        //    $photo['girl_id'] = $girl->id;
+            //    $photo['girl_id'] = $girl->id;
 
             $photo->save();
         }
@@ -472,27 +472,21 @@ class AnketController extends Controller
         if ($girl == null) {
             return $this->index();
         }
-        dump($girl);
         $phone = $user->phone;
         $countries = collect(DB::select('select * from countries'));
 
-        $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',[$girl->country_id]));
+        $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
+            [$girl->country_id]));
+        $region = collect(DB::select('select * from regions where id=?',
+            [$girl->region_id]))->first(); //получаем страны
 
-        $region2= collect(DB::select('select * from `regions` where `id`=?', [$girl->region_id]));
-        dump($region2);
+        $city = collect(DB::select('select * from cities where id=?',
+            [$girl->city_id]))->first();
 
-
-        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region2[0]->id_region]));
-        dump($cityes);
-        $city = City::select('id', 'name', 'id_region', 'id_country', 'id_city')->where('id_city',
-            $girl->city_id)->first();
 
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
-        dump($country);
-
-        $region = Region::select('name', 'id_country', 'id_region')->where('id_region', $girl->region_id)->first();
-
+        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
 
         return view('editGirl')->with([
             'girl' => $girl,
@@ -500,9 +494,9 @@ class AnketController extends Controller
             'countries' => $countries,
             'regions' => $regions,
             'cityes' => $cityes,
-            'city'=>$city,
-            'rigion'=>$region,
-            'country'=>$country
+            'city' => $city,
+            'region' => $region,
+            'country' => $country
         ]);
     }
 

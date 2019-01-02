@@ -113,6 +113,7 @@
             <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region"
                     disabled>
                 <option value="-">-</option>
+                <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
                 @foreach($regions as $region)
                     <option value="{{$region->id_region}}">{{$region->name}}</option>
                 @endforeach
@@ -121,8 +122,8 @@
 
         <label>Город:
             <select id="city" class="city" style="width: 200px" name="city" disabled>
+                <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
                 <option value="-">-</option>
-                <option value=""></option>
                 @foreach($cityes as $city)
                     <option value="{{$city->id_city}}">{{$city->name}}</option>
                 @endforeach
