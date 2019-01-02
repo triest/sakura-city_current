@@ -3,7 +3,7 @@
 @section('content')
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-
+    <a class="button blue" href="{{route('galeray')}}" role="link">Редактировать галерею</a>
     <form action="{{route('girlsEdit')}}" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
         <img height="250" src="<?php echo asset("public/images/upload/$girl->main_image")?>"></img></a>
@@ -111,6 +111,9 @@
             <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region"
                     disabled>
                 <option value="-">-</option>
+                @foreach($regions as $region)
+                    <option value="{{$region->id_region}}">{{$region->name}}</option>
+                @endforeach
             </select>
         </label>
 
@@ -217,7 +220,7 @@
     </form>
     <br>
 
-    <a class="button blue" href="{{route('galeray')}}" role="link">Редактировать галерею</a>
+
     <hr>
     <a class="button blue" href="{{route('main')}}" role="link">К списку анкет</a>
 

@@ -127,8 +127,6 @@ Route::post('/SetPriceToTop/', 'GirlsController@SetPriceToTop')->name('SetToTopP
 Route::get('/testmail', 'GirlsController@testemail');
 
 
-//Route::get('/confirnEmail','GirlsController@confirm')->name('confirm-email');
-
 Route::get('/confirnEmail', 'GirlsController@MailtoConfurn')->name('sendConfurmEmail');
 
 Route::get('/user/confernd/{token}', 'GirlsController@conferndEmail')->name('conferndEmail');
@@ -150,8 +148,6 @@ Route::get('/rules', function () {
 })->name('rules');
 Route::post('/rules2', 'GirlsController@akceptRules')->name('aceptRules');
 
-//ввод телефона без ререхода
-//Route::get('/inputPhone2', 'GirlsController@inputPhone2')->name('inputMobilePhone2');
 
 Route::get('/user/anketa/edit/', 'AnketController@girlsEditAuchAnket')->name('girlsEditAuchAnket');
 Route::post('/user/anketa/edit/', 'AnketController@edit')->name('girlsEdit');
@@ -180,8 +176,6 @@ Route::get('/findRegions', function () {
     $regions = Region::where('id_country', '=', $id)
         ->orderBy('id')
         ->get();
-
-    // dump($regions);
     return Response::json($regions);
 }
 );
@@ -268,21 +262,20 @@ Route::get('/inpotMobilePhoneAjax', function () {
 Route::get('/bladetest', function () {
     return view('bladetest');
 })->name('bladetest');
-//Route::get('/inputphone',function (){return view('inputphone');})->name('inputMobile');
 
 //поиск анкет
 Route::post('/search', 'GirlsController@search')->name('search');
 Route::get('/reset', 'GirlsController@index2')->name('reset');
 
 //действия адмиистратора с анкетой
-Route::post('/admin-to-girl/', 'GirlsController@adminToGirl')->name('adminToGirl');
-Route::post('/gitl-to-admin/', 'GirlsController@girlToAdmin')->name('girlToAdmin');
+Route::post('/admin-to-girl/', 'MessageController@adminToGirl')->name('adminToGirl');
+Route::post('/gitl-to-admin/', 'MessageController@girlToAdmin')->name('girlToAdmin');
 
 
 //сообщения
-Route::get('/messages', 'GirlsController@getMessagePage')->name('MessagePage');
-Route::get('/messages/{girl_id}', 'GirlsController@getMessagePageAdmin')->name('MessagePageAdmin');
+Route::get('/messages', 'MessageController@getMessagePage')->name('MessagePage');
+Route::get('/messages/{girl_id}', 'MessageController@getMessagePageAdmin')->name('MessagePageAdmin');
 
-Route::get('/usersList', 'GirlsController@usersList')->name('usersList');
-Route::get('/messageList', 'GirlsController@messagesList')->name('messageList');
+Route::get('/usersList', 'AdminController@usersList')->name('usersList');
+Route::get('/messageList', 'MessagesController@messagesList')->name('messageList');
 Route::get('/moneyHistory', 'GirlsController@moneyHistory')->name('moneyHistory');

@@ -44,5 +44,41 @@ use App\Mail\Reminder;
 
 class AdminController extends Controller
 {
-  
+
+    public function moneyHistory(Request $request)
+    {
+        $user = Auth::user();
+        if ($user == null) {
+            return $this->index();
+        }
+        if ($user->isAdmin == 0 or $user == null) {
+            return $this->index();
+        }
+        $history = DB::table('money_history')
+            ->orderBy('date', 'DESC')
+            ->paginate(50);
+        return view('moneyhistory')->with(['history' => $history]);
+    }
+
+    public function usersList(Request $request)
+    {
+        $users = User::select([
+            'id',
+            'name',
+            'email',
+            'is_conferd',
+            'money',
+            'isAdmin',
+            'phone',
+            'phone_conferd',
+            'actice_code',
+            'akcept',
+            'smsResetCode'
+        ])
+            ->simplePaginate(25);
+
+
+        return view('users-list')->with(['users' => $users]);
+    }
+
 }

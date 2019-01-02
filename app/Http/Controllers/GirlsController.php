@@ -46,8 +46,6 @@ class GirlsController extends Controller
 {
     function index()
     {
-        $girls = Girl::select(['id', 'name', 'login', 'email', 'phone', 'main_image', 'description'])
-            ->orderBy('created_at', 'DESC')->simplePaginate(9);
         if (Auth::check()) {
             $user = Auth::user();  // и если админ
             if ($user->isAdmin == 1) {
@@ -69,72 +67,6 @@ class GirlsController extends Controller
         return view('index')->with(['girls' => $girls,/*'vipGirls'=>$vipGirls*/]);
     }
 
-    function index2()
-    {
-        $girls = Girl::select([
-            'id',
-            'name',
-            'login',
-            'email',
-            'phone',
-            'main_image',
-            'description'
-        ])->simplePaginate(9);
-        $current_date = Carbon::now();
-        $girls = Girl::select(['id', 'name', 'login', 'email', 'phone', 'main_image', 'description', 'sex'])
-            ->orderBy('created_at', 'DESC')
-            ->Paginate(9);
-        $countries = collect(DB::select('select * from countries')); //получаем страны
-
-        //получаем регионы
-        $regions = collect(DB::select('select * from regions where id_country=1')); //получаем страны
-
-        $cities = collect(DB::select('select * from cities where id_region=1'));
-
-
-        $vipGirls = Girl::select(['id', 'name', 'login', 'email', 'phone', 'main_image', 'description'])
-            ->where('beginvip', '<', $current_date)
-            ->where('endvip', '>', $current_date)
-            ->orderBy('created_at', 'DESC')
-            ->orderBy('rating', 'ASC')
-            ->Paginate(9);
-        return view('index2')->with([
-            'girls' => $girls,
-            'vipGirls' => $vipGirls,
-            'countries' => $countries,
-            'regions' => $regions,
-            'cities' => $cities
-        ]);
-    }
-
-    function bot()
-    {
-        $girls = Girl::select([
-            'id',
-            'name',
-            'login',
-            'email',
-            'phone',
-            'main_image',
-            'description'
-        ])->simplePaginate(9);
-        //  dump($girls);
-        $current_date = Carbon::now();
-        //   dump($current_date);
-
-        $girls = Girl::select(['id', 'name', 'phone', 'main_image', 'description', 'sex'])
-            //  ->where('vip','=','1')
-            ->orderBy('created_at', 'DESC')
-            ->orderBy('rating', 'ASC')
-            ->Paginate(9);
-        $vipGirls = Girl::select(['id', 'name', 'login', 'email', 'phone', 'main_image', 'description'])
-            ->where('beginvip', '<', $current_date)
-            ->where('endvip', '>', $current_date)
-            ->orderBy('created_at', 'DESC')
-            ->orderBy('rating', 'ASC')
-            ->Paginate(9);
-        return $girls;
-    }
 
     public static function getVip()
     {
@@ -244,8 +176,6 @@ class GirlsController extends Controller
         File::append(base_path() . '/public/file.txt',
             'oprration_id:' . $request['operation_id'] . ',' . 'datetime: ' . $request['datetime'] . ',' . $request['sha1_hash'] . ',' . $request['withdraw_amount'] . ',label:' . $request['label'] . ',' . $date . PHP_EOL);
         $user_email = $request['label'];
-        echo 'user email:';
-        echo $user_email;
         $user_money = $request['amount'];
 
 
@@ -294,9 +224,7 @@ class GirlsController extends Controller
         $price = $price->price;
         if ($have_user >= $price) {
             $create_date = $girl->created_at;
-
             $current_date = Carbon::now();
-
             DB::table('girls')->where('user_id', $id)->update(['created_at' => $current_date]);
             //теперь списываем деньги
             $new_money = $have_user - $price;
@@ -306,8 +234,6 @@ class GirlsController extends Controller
         } else {
             echo 'Недостаточно денег.';
         }
-
-        $requwest = new Request();
         return $this->index();
     }
 
@@ -329,7 +255,6 @@ class GirlsController extends Controller
             $current_date = Carbon::now();
             // получем дату оканчания vip ытатуса
             $end_vip = $girl->endvip;
-
             $days = $request->days;
             if ($end_vip == null or $end_vip < $current_date) {
                 $end_vip = $current_date;
@@ -343,17 +268,13 @@ class GirlsController extends Controller
             //обновляем анкету
             DB::table('girls')->where('id', $girl->id)->update(['endvip' => $end_vip]);
             DB::table('girls')->where('id', $girl->id)->update(['beginvip' => $current_date]);
-            //    die();
-
             $requwest = new Request();
             return $this->girlsShowAuchAnket($requwest);
-
         } else {
             echo 'Недостаточно денег.';
             $requwest = new Request();
             return $this->girlsShowAuchAnket($requwest);
         }
-
         $requwest = new Request();
         return $this->girlsShowAuchAnket($requwest);
     }
@@ -396,7 +317,6 @@ class GirlsController extends Controller
         $user = Auth::user();
         if ($user->isAdmin == 1) {
             // теперь надо получить цену
-
             $priceFirstPlase = collect(DB::select('select price from servises where name=\'toFirstPlase\' '))->first();
             $priceTop = collect(DB::select('select price from servises where name=\'toTop\' '))->first();
             return view('AdminPanel')->with(['priceFirstPlase' => $priceFirstPlase, 'priceToTop' => $priceTop]);;
@@ -711,13 +631,10 @@ class GirlsController extends Controller
         return view('createGirl')->with(['servises' => $serveses, 'title' => $title, 'phone' => $phone]);
     }
 
-
-
     public function inputPhone2()
     {
         return view('inputPhone2');
     }
-
 
     public function findProductName(Request $request)
     {
@@ -736,10 +653,8 @@ class GirlsController extends Controller
 
     public function findPrice(Request $request)
     {
-
         //it will get price if its id match with product id
         $p = Product::select('price')->where('id', $request->id)->first();
-
         return response()->json($p);
     }
 
@@ -857,180 +772,6 @@ class GirlsController extends Controller
 
     }
 
-    public function adminToGirl(Request $request)
-    {
-
-        if ($request->has('banned')) {
-            $banned = 1;
-        } else {
-            $banned = 0;
-        }
-
-        $girl = Girl::select([
-            'name',
-            'email',
-            'password',
-            'id',
-            'phone',
-            'description',
-            'enabled',
-            'payday',
-            'payed',
-            'login',
-            'main_image',
-            'sex',
-            'meet',
-            'weight',
-            'height',
-            'age',
-            'country_id',
-            'region_id',
-            'city_id',
-            'banned'
-        ])
-            ->where('id', $request->girl)->first();
-        $girl->banned = $banned;
-        $girl->save();
-
-        //теперь сообщение
-        if ($request->description != null) {
-            $message = new Message();
-            $message->text = $request->description;
-            $message->girl_id = $request->girl;
-            $message->fromAdmin = 1;
-            $message->save();
-        }
-
-        if ($banned == 0) {
-            $text = "sakura-city.info. У вас новое сообщение от администратора! Ваша анкета разблокированна.";
-        } elseif ($banned == 1) {
-            $text = "sakura-city.info. У вас новое сообщение от администратора! Ваша анкета заблокированна.";
-        }
-        $this->SendSMS($girl->phone, $text);
-        return $this->showGirl($girl->id);
-    }
-
-    public function getMessagePage()
-    {
-        if (Auth::guest()) {
-            return redirect('/login');
-        }
-        $user = Auth::user();
-
-        $girl = Girl::select(['id', 'name'])
-            ->where('user_id', $user->id)->first();
-        $messages = Message::select('id', 'text', 'girl_id', 'fromAdmin', 'date', 'readed')
-            ->where('girl_id', $girl->id)
-            ->orderBy('created_at')
-            ->get();
-        foreach ($messages as $message) {
-            if ($message->fromAdmin == 1) {
-                $message->readed = 1;
-                $message->save();
-            }
-        }
-        return view('messages')->with(['messages' => $messages, 'girl' => $girl]);
-    }
-
-    public function getMessagePageAdmin($girl_id)
-    {
-        if (Auth::guest()) {
-            return redirect('/login');
-        }
-        $user = Auth::user();
-
-        $girl = Girl::select(['id', 'name'])
-            ->where('id', $girl_id)->first();
-        $messages = Message::select('id', 'text', 'girl_id', 'fromAdmin', 'date', 'readed', 'adminreaded')
-            ->where('girl_id', $girl->id)
-            ->orderBy('created_at')
-            ->get();
-        foreach ($messages as $message) {
-            if ($message->fromAdmin == 1) {
-                $message->readed = 1;
-                $message->save();
-            }
-        }
-        foreach ($messages as $message) {
-            $message->adminreaded = 1;
-            $message->save();
-        }
-        return view('messages')->with(['messages' => $messages, 'girl' => $girl]);
-    }
-
-    public function girlToAdmin(Request $request)
-    {
-        $validatedData = $request->validate([
-            'girl' => 'required',
-            'description' => 'required'
-        ]);
-        if (Auth::guest()) {
-            return redirect('/login');
-        }
-        $message = new Message();
-        $message->text = $request->description;
-        $message->girl_id = $request->girl;
-        $message->fromAdmin = 0;
-        $message->adminreaded = 0;
-        $message->readed = 0;
-        $message->save();
-        return $this->getMessagePage();
-    }
-
-    public function usersList(Request $request)
-    {
-        $users = User::select([
-            'id',
-            'name',
-            'email',
-            'is_conferd',
-            'money',
-            'isAdmin',
-            'phone',
-            'phone_conferd',
-            'actice_code',
-            'akcept',
-            'smsResetCode'
-        ])
-            ->simplePaginate(25);
-
-
-        return view('users-list')->with(['users' => $users]);
-    }
-
-    public function messagesList(Request $request)
-    {
-        $messages = Message::select(['id', 'text', 'girl_id', 'date', 'adminreaded'])
-            //->groupBY('girl_id')
-            ->orderBY('date', 'desc', 'girl_id')
-            ->get()
-            ->unique('girl_id');
-        $user = Auth::user();
-        if ($user == null) {
-            return $this->index();
-        }
-        if ($user->isAdmin == 0 or $user == null) {
-            return $this->index();
-        }
-        return view('messages-list')->with(['messages' => $messages]);
-
-    }
-
-    public function moneyHistory(Request $request)
-    {
-        $user = Auth::user();
-        if ($user == null) {
-            return $this->index();
-        }
-        if ($user->isAdmin == 0 or $user == null) {
-            return $this->index();
-        }
-        $history = DB::table('money_history')
-            ->orderBy('date', 'DESC')
-            ->paginate(50);
-        return view('moneyhistory')->with(['history' => $history]);
-    }
-
     public function SendResetSMS($phone)
     {
         return Response::json([
@@ -1071,6 +812,5 @@ class GirlsController extends Controller
 
         return $this->index();
     }
-
 
 }

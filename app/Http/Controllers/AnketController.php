@@ -46,7 +46,7 @@ class AnketController extends Controller
 {
     function index()
     {
-     echo "index";
+        echo "index";
     }
 
     public function girlsShowAuchAnket(Request $request)
@@ -275,9 +275,6 @@ class AnketController extends Controller
             }
         }
 
-
-// регион
-
         $girl->save();
 
         if (Input::hasFile('images')) {
@@ -291,7 +288,6 @@ class AnketController extends Controller
                 $photo['photo_name'] = $image_new_name . '.' . $image_extension;
                 $photo['girl_id'] = $id;
                 $photo->save();
-
             }
         }
         return redirect('/girls');
@@ -346,8 +342,6 @@ class AnketController extends Controller
         if ($user == null) {
             return redirect('/login');
         }
-
-
         $girl = Girl::select([
             'id',
             'name',
@@ -374,7 +368,6 @@ class AnketController extends Controller
         try {
             $temp_file = base_path() . '/public/images/upload/' . $id;
             File::Delete($temp_file);
-            print($id);
             // тут будем удалять из таблицы
             $photo = Photo::select('id')->where('photo_name', $id)->get();
             $photo->delete();
@@ -387,12 +380,10 @@ class AnketController extends Controller
         try {
             File::delete($id);
         } catch (IOException $e) {
-
         }
         $image->delete();
         $requwest = new Request();
         return $this->galarayView($requwest);
-
     }
 
     public function uploadimage(Request $request)
@@ -440,7 +431,8 @@ class AnketController extends Controller
             $photo = new Photo();
             $girl = Girl::select('id')->where('user_id', $user->id)->first();
             $photo['photo_name'] = $image_new_name . '.' . $image_extension;
-            $photo['girl_id'] = $girl->id;
+        //    $photo['girl_id'] = $girl->id;
+
             $photo->save();
         }
         $requwest = new Request();
@@ -480,11 +472,18 @@ class AnketController extends Controller
         if ($girl == null) {
             return $this->index();
         }
+        dump($girl);
         $phone = $user->phone;
         $countries = collect(DB::select('select * from countries'));
-        $regions = collect(DB::select('select * from regions'));
-        $cityes = collect(DB::select('select * from cities where id_region=?', [$girl->region_id]));
 
+        $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',[$girl->country_id]));
+
+        $region2= collect(DB::select('select * from `regions` where `id`=?', [$girl->region_id]));
+        dump($region2);
+
+
+        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region2[0]->id_region]));
+        dump($cityes);
         $city = City::select('id', 'name', 'id_region', 'id_country', 'id_city')->where('id_city',
             $girl->city_id)->first();
 
@@ -493,13 +492,16 @@ class AnketController extends Controller
 
         $region = Region::select('name', 'id_country', 'id_region')->where('id_region', $girl->region_id)->first();
 
+
         return view('editGirl')->with([
             'girl' => $girl,
             'phone' => $phone,
             'countries' => $countries,
-            'country' => $country,
             'regions' => $regions,
-            'cityes' => $cityes
+            'cityes' => $cityes,
+            'city'=>$city,
+            'rigion'=>$region,
+            'country'=>$country
         ]);
     }
 
