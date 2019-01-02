@@ -25,14 +25,14 @@ Route::get('/welcome-test', function () {
     return view('welcome-test');
 });
 
-Route::get('/girls', 'GirlsController@index')->name('main');
-Route::get('/girls/{id}', 'GirlsController@showGirl')->name('showGirl');
+Route::get('/anket', 'GirlsController@index')->name('main');
+Route::get('/anket/{id}', 'GirlsController@showGirl')->name('showGirl');
 
 
 //пользователь соглашение
 Route::get('/Terms', 'GirlsController@showTerms')->name('showTerms');
-Route::get('/createGirlPage', 'AnketController@createGirl')->name('createGirlPage');
-Route::post('/girls/create', 'AnketController@Store')->name('girlsCreate');
+Route::get('/createAnketPage', 'AnketController@createGirl')->name('createGirlPage');
+Route::post('/anket/create', 'AnketController@Store')->name('girlsCreate');
 
 
 Route::post('/yandex', 'GirlsController@reciverYandex')->name('yandexPost');
@@ -160,9 +160,9 @@ Route::post('/user/anketa/edit/', 'GirlsController@edit')->name('girlsEdit');
 Route::get('/bot', 'GirlsController@bot')->name('bot');
 
 //галерея
-Route::get('/galeray', 'GirlsController@galarayView')->name('galeray');
-Route::get('/image/delete/{imege}', 'GirlsController@deleteimage')->name('deleteImage');
-Route::post('/image/upload', 'GirlsController@uploadimage')->name('uploadImage');
+Route::get('/galeray', 'AnketController@galarayView')->name('galeray');
+Route::get('/image/delete/{imege}', 'AnketController@deleteimage')->name('deleteImage');
+Route::post('/image/upload', 'AnketController@uploadimage')->name('uploadImage');
 Route::post('/image/main/upload', 'GirlsController@uploadMainimage')->name('uploadMainImage');
 
 Route::get('/message', 'MessagesController@GetMessagesPage');

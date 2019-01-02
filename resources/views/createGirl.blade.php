@@ -4,7 +4,7 @@
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
 
-    <form action="{{route('girlsCreate')}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('girlsCreate')}}" method="post" enctype="multipart/form-data" novalidate>
         {{ csrf_field() }}
 
         <div class="form-group">

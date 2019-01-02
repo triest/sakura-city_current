@@ -984,8 +984,6 @@ class GirlsController extends Controller
             'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
         ]);
-
-
         $user = Auth::user();
         if (Auth::guest()) {
             return redirect('/login');
@@ -1020,29 +1018,18 @@ class GirlsController extends Controller
             $image_extension = $request->file('file')->getClientOriginalExtension();
             $image_new_name = md5(microtime(true));
             $temp_file = base_path() . '/public/images/upload/' . strtolower($image_new_name . '.' . $image_extension);// кладем файл с новыс именем
-            $temp_file = base_path() . '/public/images/upload/' . strtolower($image_new_name . '.' . $image_extension);// кладем файл с новыс именем
             $request->file('file')
                 ->move(base_path() . '/public/images/upload/', strtolower($image_new_name . '.' . $image_extension));
-            $origin_size = getimagesize($temp_file);
-
             $photo = new Photo();
             $girl = Girl::select('id')->where('user_id', $user->id)->first();
             $photo['photo_name'] = $image_new_name . '.' . $image_extension;
             $photo['girl_id'] = $girl->id;
-            //получаем id девушки
             $photo->save();
         }
         $requwest = new Request();
         return $this->galarayView($requwest);
     }
 
-    public function prodfunct()
-    {
-
-        $prod = ProductCat::all();//get data from table
-        return view('productlist', compact('prod'));//sent data to view
-
-    }
 
     public function findProductName(Request $request)
     {
