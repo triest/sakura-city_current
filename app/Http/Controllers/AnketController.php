@@ -542,27 +542,22 @@ class AnketController extends Controller
                 [$request->region]));
             $girl->region_id = $region[0]->id;
         }
-
-        //city]
-
         if ($request->city == '-') {
             $girl->city_id = null;
             $girl->save();
         } else {
-            $region = collect(DB::select('select * from cities where id_city=?',
+            $city = collect(DB::select('select * from cities where id_city=?',
                 [$request->city]));
-            dump($region);
-
-            $arr = (array)$region;
-            dump($arr);
-            die();
-            if (!empty($arr)) {
-
-                $girl->city_id = $region[0]->id;
+            if ($city->count() == 0) {
+                $city = collect(DB::select('select * from cities where id=?',[$request->city]));
             }
-             else{
-                die();
-             }
+            $girl->city_id = $city[0]->id;
+            if ($city->count() == 0) {
+                echo "empty";
+                $city = collect(DB::select('select * from cities where id=?',
+                    [$request->city]));
+                $girl->city_id = $city[0]->id;
+            }
             $girl->save();
         }
 
