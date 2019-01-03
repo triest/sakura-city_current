@@ -182,13 +182,13 @@ Route::get('/findRegions', function () {
 
 Route::get('/findCitys', function () {
     $id = Input::get('region_id');
- //   dump($id);
-    $region= collect(DB::select('select * from regions where id=?',
-        [$id]));
-   // dump($region);
+//    dump($id);
+   // $region= collect(DB::select('select * from regions where id=?',
+     //   [$id]));
+  // dump($region);
     $city = collect(DB::select('SELECT * FROM `cities` WHERE `id_region`=? ',
-        [$region[0]->id_region]));
-
+        [$id]));
+   //  dump($city);
     return Response::json($city);
 });
 
@@ -290,8 +290,8 @@ Route::post('/gitl-to-admin/', 'MessageController@girlToAdmin')->name('girlToAdm
 
 
 //сообщения
-Route::get('/messages', 'MessageController@getMessagePage')->name('MessagePage');
-Route::get('/messages/{girl_id}', 'MessageController@getMessagePageAdmin')->name('MessagePageAdmin');
+Route::get('/messages', 'MessagesController@getMessagePage')->name('MessagePage');
+Route::get('/messages/{girl_id}', 'MessagesController@getMessagePageAdmin')->name('MessagePageAdmin');
 
 Route::get('/usersList', 'AdminController@usersList')->name('usersList');
 Route::get('/messageList', 'MessagesController@messagesList')->name('messageList');
