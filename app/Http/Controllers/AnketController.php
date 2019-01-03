@@ -391,8 +391,13 @@ class AnketController extends Controller
             $request->file('file')
                 ->move(base_path() . '/public/images/upload/', strtolower($image_new_name . '.' . $image_extension));
             $photo = new Photo();
-            $girl = Girl::select('id')->where('user_id', $user->id)->first();
             $photo['photo_name'] = $image_new_name . '.' . $image_extension;
+            dump($request);
+            dump($user);
+            $girl=$user->girl()->first();
+            $girl->photos()->save($photo);
+
+
             //    $photo['girl_id'] = $girl->id;
             $photo->save();
         }
@@ -520,7 +525,6 @@ class AnketController extends Controller
             $origin_size = getimagesize($temp_file);
         }
         //тут местоположее
-        dump($request);
 
         //country
         if ($request->country == '-') {
