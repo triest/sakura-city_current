@@ -229,36 +229,14 @@ class AnketController extends Controller
         //встречи
         //местоположение
         $girl->save();
-        if ($request->has('country')) {
-            $country = $request['country'];
-            if ($country == "-") {
-                $country = null;
-            }
-            DB::table('girls')->where('id', $girl->id)->update(['country_id' => $country]);
-        }
-        if ($request->has('region')) {
-            $region = $request['region'];
-            if ($region == "-") {
-                $region = null;
-            }
-            if ($region != null) {
-                $girl['region_id'] = $region;
-            }
-            DB::table('girls')->where('id', $girl->id)->update(['region_id' => $region]);
-        }
-        if ($request->has('city')) {
-            if ($request['city'] != null) {
-                $city = $request['city'];
-                if ($city == "-") {
-                    $city = null;
-                };
-                DB::table('girls')->where('id', $girl->id)->update(['city_id' => $city]);
-            }
-        }
-        $girl->save();
+        dump($request);
+
+           $girl->save();
         if (Input::hasFile('images')) {
             $count = 0;
+
             foreach ($request->images as $key) {
+                echo 'image';
                 $image_extension = $request->file('file')->getClientOriginalExtension();
                 $image_new_name = md5(microtime(true));
                 $key->move(public_path() . '/images/upload/', strtolower($image_new_name . '.' . $image_extension));
@@ -267,6 +245,42 @@ class AnketController extends Controller
                 $photo['photo_name'] = $image_new_name . '.' . $image_extension;
                 $photo['girl_id'] = $id;
                 $photo->save();
+            }
+        }
+
+        if ($request->country == '-') {
+            $girl->country_id = null;
+            $girl->save();
+        } else {
+            $country = collect(DB::select('select * from countries where id_country=?',
+                [$request->country]));
+            $girl->country_id = $country[0]->id_country;
+            $girl->save();
+        }
+        //region
+        if ($request->region == '-') {
+            $girl->region_id = null;
+            $girl->save();
+        } else {
+            $region = collect(DB::select('select * from regions where id_region=?',
+                [$request->region]));
+            $girl->region_id = $region[0]->id;
+        }
+        if ($request->city == '-') {
+            $girl->city_id = null;
+            $girl->save();
+        } else {
+            $city = collect(DB::select('select * from cities where id_city=?',
+                [$request->city]));
+            if ($city->count() == 0) {
+                $city = collect(DB::select('select * from cities where id=?', [$request->city]));
+            }
+            $girl->city_id = $city[0]->id;
+            if ($city->count() == 0) {
+                echo "empty";
+                $city = collect(DB::select('select * from cities where id=?',
+                    [$request->city]));
+                $girl->city_id = $city[0]->id;
             }
         }
         return redirect('/girls');
@@ -441,6 +455,7 @@ class AnketController extends Controller
         if ($girl == null) {
             return $this->index();
         }
+        dump($girl);
         $phone = $user->phone;
         $countries = collect(DB::select('select * from countries'));
         $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
@@ -451,8 +466,11 @@ class AnketController extends Controller
             [$girl->city_id]))->first();
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
-
-        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
+        if ($girl->region_id!=null) {
+            $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
+        }else{
+            $cityes=null;
+        }
 
         return view('editGirl')->with([
             'girl' => $girl,

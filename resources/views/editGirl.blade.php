@@ -122,9 +122,11 @@
                     <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
                 @endif
                 <option value="-">-</option>
-                @foreach($cityes as $city)
-                    <option value="{{$city->id_city}}">{{$city->name}}</option>
-                @endforeach
+                @if($cityes!=null)
+                    @foreach($cityes as $city)
+                        <option value="{{$city->id_city}}">{{$city->name}}</option>
+                    @endforeach
+                @endif
             </select>
         </label>
         <script>
@@ -213,6 +215,7 @@
                 }
                 return true;
             }
+
             function isNumber2(evt) {
                 evt = (evt) ? evt : window.event;
                 return false;

@@ -4,7 +4,7 @@
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
 
-    <form action="{{route('girlsEdit')}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('girlsCreate')}}" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
         <br>
         <div class="form-group">
@@ -61,7 +61,16 @@
         <br>
         <br>
 
-        <!--что-бы лишний раз не меняли -->
+        <label>Выберите заглавную фотографию</label>
+
+        <input type="file" id="file" accept="image/*" name="file" value="{{ old('file')}}" required>
+        @if($errors->has('file'))
+            <font color="red"><p>  {{$errors->first('file')}}</p></font>
+        @endif
+        <br>
+
+
+    <!--что-бы лишний раз не меняли -->
 
         <label>Страна:
             <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
@@ -136,6 +145,7 @@
 
 
         </script>
+
         <br>
         <div class="form-group">
             <label for="exampleInputFile">Текст анкеты:</label>
