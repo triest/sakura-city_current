@@ -81,4 +81,62 @@ class AdminController extends Controller
         return view('users-list')->with(['users' => $users]);
     }
 
+    public function getAdminPanel()
+    {
+        $user = Auth::user();
+        if ($user->isAdmin == 1) {
+            // теперь надо получить цену
+            $priceFirstPlase = collect(DB::select('select price from servises where name=\'toFirstPlase\' '))->first();
+            $priceTop = collect(DB::select('select price from servises where name=\'toTop\' '))->first();
+            return view('AdminPanel')->with(['priceFirstPlase' => $priceFirstPlase, 'priceToTop' => $priceTop]);;
+
+        } else {
+            return redirect('/girls');
+        }
+
+        return redirect('/girls');
+    }
+
+    //устанавливаем цену за первое место:
+    function SetPriceToFirstPlase(Request $request)
+    {
+        $price = $request['price'];
+        $validator = Validator::make($request->all(), [
+            'price' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/girls');
+        }
+
+        if ($price <= 0) {
+            return redirect('/girls');
+        }
+        //      DB::update('update servises set price = ? where name like \'toTop\'',$price );
+        DB::update('update servises set price = ? where name = \'toFirstPlase\'', [$price]);
+        return $this->getAdminPanel();
+
+    }
+
+    //устанавливаем цену за шапку:
+    function SetPriceToTop(Request $request)
+    {
+        $price = $request['price'];
+        $validator = Validator::make($request->all(), [
+            'price' => 'required|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/girls');
+        }
+
+        if ($price <= 0) {
+            return redirect('/girls');
+        }
+        DB::update('update servises set price = ? where name = \'toTop\'', [$price]);
+        return $this->getAdminPanel();
+
+    }
+
+
 }

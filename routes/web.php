@@ -118,9 +118,9 @@ Route::get('/testmail', 'GirlsController@testMail');
 
 
 // для администратора
-Route::get('/adminPanel', 'GirlsController@getAdminPanel')->name('adminPanel');
-Route::post('/SetPriceToFirstPlase/', 'GirlsController@SetPriceToFirstPlase')->name('SetToFirstPlase');
-Route::post('/SetPriceToTop/', 'GirlsController@SetPriceToTop')->name('SetToTopPrice');
+Route::get('/adminPanel', 'AdminController@getAdminPanel')->name('adminPanel');
+Route::post('/SetPriceToFirstPlase/', 'AdminController@SetPriceToFirstPlase')->name('SetToFirstPlase');
+Route::post('/SetPriceToTop/', 'AdminController@SetPriceToTop')->name('SetToTopPrice');
 
 
 //почта
