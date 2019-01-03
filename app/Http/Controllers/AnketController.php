@@ -392,13 +392,8 @@ class AnketController extends Controller
                 ->move(base_path() . '/public/images/upload/', strtolower($image_new_name . '.' . $image_extension));
             $photo = new Photo();
             $photo['photo_name'] = $image_new_name . '.' . $image_extension;
-            dump($request);
-            dump($user);
-            $girl=$user->girl()->first();
+            $girl = $user->girl()->first();
             $girl->photos()->save($photo);
-
-
-            //    $photo['girl_id'] = $girl->id;
             $photo->save();
         }
         $requwest = new Request();
@@ -553,7 +548,7 @@ class AnketController extends Controller
             $city = collect(DB::select('select * from cities where id_city=?',
                 [$request->city]));
             if ($city->count() == 0) {
-                $city = collect(DB::select('select * from cities where id=?',[$request->city]));
+                $city = collect(DB::select('select * from cities where id=?', [$request->city]));
             }
             $girl->city_id = $city[0]->id;
             if ($city->count() == 0) {

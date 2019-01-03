@@ -14,9 +14,25 @@
                     @if($errors->has('file'))
                         <font color="red"><p>  {{$errors->first('file')}}</p></font>
                     @endif
-                    <button type="submit" class="btn btn-default">Загрузить фотографию</button>
+                    <input type="submit" class="btn btn-default"></input>
                 </form>
             </div>
+            <!--скрипт для отключения кнопки загрузки -->
+            <script type="text/javascript">
+                $(document).ready(
+                    function(){
+                        $('input:submit').attr('disabled',true);
+                        $('input:file').change(
+                            function(){
+                                if ($(this).val()){
+                                    $('input:submit').removeAttr('disabled');
+                                }
+                                else {
+                                    $('input:submit').attr('disabled',true);
+                                }
+                            });
+                    });
+            </script>
             <br>
             <div class="container gallery-container">
                 <div class="tz-gallery">
