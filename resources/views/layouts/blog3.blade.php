@@ -692,7 +692,8 @@
                         <a href="{{route('girlsShowAuchAnket')}}">
                             <b> Управление анкетой</b>
                         </a>
-                        <br>  <br>
+                        <a class="button green" href="{{ route('galeray')}}">Редактировать галлерею.</a><br>
+                    
                         <a class="button green" href="{{ route('MessagePage') }}">Переписка с администратором.</a><br>
                     @else
                         <b> У Вас пока не создана анкета.<br>
