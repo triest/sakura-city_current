@@ -30,9 +30,9 @@ Route::get('/anket/{id}', 'GirlsController@showGirl')->name('showGirl');
 
 
 //пользователь соглашение
-Route::get('/Terms', 'GirlsController@showTerms')->name('showTerms');
-Route::get('/createAnketPage', 'AnketController@createGirl')->name('createGirlPage');
-Route::post('/anket/create', 'AnketController@Store')->name('girlsCreate');
+Route::get('/Terms', 'GirlsController@showTerms')->name('showTerms')->middleware('auth');;
+Route::get('/createAnketPage', 'AnketController@createGirl')->name('createGirlPage')->middleware('auth');;
+Route::post('/anket/create', 'AnketController@Store')->name('girlsCreate')->middleware('auth');;
 
 
 Route::post('/yandex', 'GirlsController@reciverYandex')->name('yandexPost');
@@ -46,6 +46,7 @@ Route::get('/testpost', function () {
 //аутентииакация
 Route::get('auth/login', 'Auth\AuthController@getLogin')->name('autorization');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
+
 
 Route::get('auth/logout', 'Auth\AuthController@logout')->name('logout')->middleware('auth');;
 Route::get('/user/anketa', 'AnketController@girlsShowAuchAnket')->name('girlsShowAuchAnket');
@@ -89,6 +90,7 @@ Route::get('/sendSMS', function () {
 }
 );
 
+//
 Route::get('/sendCODE', function () {
     $code = Input::get('code');
     $phone = Input::get('phone');
@@ -106,7 +108,7 @@ Route::get('/sendCODE', function () {
 }
 );
 
-
+//отправка sms сброса
 Route::post('/resetPasswordSMS', 'GirlsController@resetPassSMS')->name('ResetPassSMS');
 
 
@@ -118,9 +120,9 @@ Route::get('/testmail', 'GirlsController@testMail');
 
 
 // для администратора
-Route::get('/adminPanel', 'AdminController@getAdminPanel')->name('adminPanel');
-Route::post('/SetPriceToFirstPlase/', 'AdminController@SetPriceToFirstPlase')->name('SetToFirstPlase');
-Route::post('/SetPriceToTop/', 'AdminController@SetPriceToTop')->name('SetToTopPrice');
+Route::get('/adminPanel', 'AdminController@getAdminPanel')->name('adminPanel')->middleware('auth');;
+Route::post('/SetPriceToFirstPlase/', 'AdminController@SetPriceToFirstPlase')->name('SetToFirstPlase')->middleware('auth');;
+Route::post('/SetPriceToTop/', 'AdminController@SetPriceToTop')->name('SetToTopPrice')->middleware('auth');;
 
 
 //почта
@@ -145,23 +147,23 @@ Route::post('/inputCode', 'GirlsController@inputActiveCode')->name('inputActiveC
 //тут путь для правил
 Route::get('/rules', function () {
     return view('rules');
-})->name('rules');
+})->name('rules')->middleware('auth');;
 Route::post('/rules2', 'GirlsController@akceptRules')->name('aceptRules');
 
 
-Route::get('/user/anketa/edit/', 'AnketController@girlsEditAuchAnket')->name('girlsEditAuchAnket');
+Route::get('/user/anketa/edit/', 'AnketController@girlsEditAuchAnket')->name('girlsEditAuchAnket')->middleware('auth');;
 Route::post('/user/anketa/edit/', 'AnketController@edit')->name('girlsEdit');
 
 //бот
 Route::get('/bot', 'GirlsController@bot')->name('bot');
 
 //галерея
-Route::get('/galeray', 'AnketController@galarayView')->name('galeray');
-Route::get('/image/delete/{imege}', 'AnketController@deleteimage')->name('deleteImage');
-Route::post('/image/upload', 'AnketController@uploadimage')->name('uploadImage');
-Route::post('/image/main/upload', 'GirlsController@uploadMainimage')->name('uploadMainImage');
+Route::get('/galeray', 'AnketController@galarayView')->name('galeray')->middleware('auth');;
+Route::get('/image/delete/{imege}', 'AnketController@deleteimage')->name('deleteImage')->middleware('auth');;
+Route::post('/image/upload', 'AnketController@uploadimage')->name('uploadImage')->middleware('auth');;
+Route::post('/image/main/upload', 'GirlsController@uploadMainimage')->name('uploadMainImage')->middleware('auth');;
 
-Route::get('/message', 'MessagesController@GetMessagesPage');
+Route::get('/message', 'MessagesController@GetMessagesPage')->middleware('auth');;
 
 Route::get('/cityes', 'GirlsController@getSearch');
 
@@ -191,7 +193,6 @@ Route::get('/findCitys', function () {
    //  dump($city);
     return Response::json($city);
 });
-
 
 Route::get('/findCitys2', function () {
     $id = Input::get('region_id');
@@ -290,9 +291,9 @@ Route::post('/gitl-to-admin/', 'MessageController@girlToAdmin')->name('girlToAdm
 
 
 //сообщения
-Route::get('/messages', 'MessagesController@getMessagePage')->name('MessagePage');
-Route::get('/messages/{girl_id}', 'MessagesController@getMessagePageAdmin')->name('MessagePageAdmin');
+Route::get('/messages', 'MessagesController@getMessagePage')->name('MessagePage')->middleware('auth');;
+Route::get('/messages/{girl_id}', 'MessagesController@getMessagePageAdmin')->name('MessagePageAdmin')->middleware('auth');;
 
-Route::get('/usersList', 'AdminController@usersList')->name('usersList');
-Route::get('/messageList', 'MessagesController@messagesList')->name('messageList');
-Route::get('/moneyHistory', 'AdminController@moneyHistory')->name('moneyHistory');
+Route::get('/usersList', 'AdminController@usersList')->name('usersList')->middleware('auth');;
+Route::get('/messageList', 'MessagesController@messagesList')->name('messageList')->middleware('auth');;
+Route::get('/moneyHistory', 'AdminController@moneyHistory')->name('moneyHistory')->middleware('auth');;

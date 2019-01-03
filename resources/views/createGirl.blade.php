@@ -1,20 +1,20 @@
-@extends('layouts.blog3', ['title' => 'Создание анкеты'])
+@extends('layouts.blog3', ['title' => 'Редактирование анкеты'])
 
 @section('content')
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
 
-    <form action="{{route('girlsCreate')}}" method="post" enctype="multipart/form-data" novalidate>
+    <form action="{{route('girlsEdit')}}" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
-
+        <br>
         <div class="form-group">
-            <label for="title">Введите имя, которое будет отображаться:</label>
-            <input type="text" class="form-control" id="name" name="name" required placeholder="Ведите имя" required
-                   value={{ old('name') }} >
+            <label for="title">Имя:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="" required>
         </div>
         @if($errors->has('name'))
-            <font color="red">  {{$errors->first('name')}}</font>
+            <font color="red"><p>  {{$errors->first('name')}}</p></font>
         @endif
+
 
         <div class="control-group2" ng-class="{true: 'error'}[submitted && form.pas.$invalid]">
             <div class="form-group">
@@ -35,18 +35,18 @@
 
         <br>
         <label for="age">Возраст:
-            <input type="number" name="age" min="18" value=18 onkeypress="return isNumber(event)" checked>
-            @if($errors->has('age'))
-                <font color="red"> {{$errors->first('age')}}</font>
-            @endif
+            <input type="number" name="age" min="18" value="18" onkeypress="return isNumber(event)" checked>
         </label><br>
+        @if($errors->has('age'))
+            <font color="red"><p>  {{$errors->first('age')}}</p></font>
+        @endif
 
         <label for="age">Рост:
             <input type="number" name="height" min="100" value="160" onkeypress="return isNumber(event)">
         </label><br>
         <label for="age">Вес:
-            <input type="number" name="weight" min="45" step="1" value="45" onkeypress="return isNumber(event)"
-                   pattern="[^@]+@[^@]+\.[0-9]{2,3}">
+            <input type="number" name="weight" min="45" step="1" value="50"
+                   pattern="[^@]+@[^@]+\.[0-9]{2,3}" onkeypress="return isNumber(event)">
         </label><br>
 
 
@@ -59,29 +59,44 @@
                name="met" value="male" checked>
         <label for="contactChoice2">с мужчиной</label>
         <br>
+        <br>
+
+        <!--что-бы лишний раз не меняли -->
+
         <label>Страна:
             <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
+                <option value="{{$country->id_country}}" selected>{{$country->name}}</option>
                 <option value="-">-</option>
                 @foreach($countries as $contry)
                     <option value="{{$contry->id_country}}">{{$contry->name}}</option>
                 @endforeach
+
             </select>
         </label>
         <label>Регион:
             <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region">
-
                 <option value="-">-</option>
-
+                @if($region!=null)
+                    <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
+                @endif
+                @foreach($regions as $region)
+                    <option value="{{$region->id_region}}">{{$region->name}}</option>
+                @endforeach
             </select>
         </label>
 
         <label>Город:
             <select id="city" class="city" style="width: 200px" name="city">
+                @if($city!=null)
+                    <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
+                @endif
                 <option value="-">-</option>
+                @foreach($cityes as $city)
+                    <option value="{{$city->id_city}}">{{$city->name}}</option>
+                @endforeach
             </select>
         </label>
         <script>
-
             $('#country').on('change', function (e) {
 
                 var country_id = e.target.value;
@@ -113,6 +128,7 @@
                 $.get('/findCitys?region_id=' + region_id, function (data) {
                     $('#city').empty();
                     $.each(data, function (index, subcatObj) {
+                        console.log(subcatObj)
                         $('#city').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
                     })
                 })
@@ -120,56 +136,15 @@
 
 
         </script>
-
+        <br>
         <div class="form-group">
-            <label for="exampleInputFile">Текст заявки:</label>
-            <textarea name="description" id="description" rows=11 cols=50 maxlength=250 required></textarea>
+            <label for="exampleInputFile">Текст анкеты:</label>
+            <textarea name="description" required> </textarea>
         </div>
-
         @if($errors->has('description'))
             <font color="red"><p class="errors">{{$errors->first('description')}}</p></font>
         @endif
 
-        <label>Выберите заглавную фотографию</label>
-
-        <input type="file" id="file" accept="image/*" name="file" value="{{ old('file')}}" required>
-        @if($errors->has('file'))
-            <font color="red"><p>  {{$errors->first('file')}}</p></font>
-        @endif
-
-        <br><br>
-        <script type="text/javascript" src="{{ asset('public/js/tinymce/tinymce.min.js') }}"></script>
-        <script type="text/javascript">
-            tinymce.init({
-                selector: "textarea",
-                plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table contextmenu paste"],
-                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-            });
-
-        </script>
-        <script type="text/javascript">
-            function isNumber(evt) {
-                evt = (evt) ? evt : window.event;
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
-                if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                    return false;
-                }
-                return true;
-            }
-
-            function isNumber2(evt) {
-                evt = (evt) ? evt : window.event;
-                return false;
-
-            }
-        </script>
-        <br>
-
-        <!-- $('#textarea_id').tinymce().save();-->
-
-        <label>Выберите фотографии для галереи(можно больше одной)</label>
-        <input required type="file" class="form-control" name="images[]" accept="image/*" placeholder="Фотографии"
-               multiple>
 
         <input type="hidden" value="{{csrf_token()}}" name="_token">
 
@@ -187,7 +162,6 @@
                     });
                 });
             });
-
         </script>
 
         <script type="text/javascript" src="{{ asset('public/js/tinymce/tinymce.min.js') }}"></script>
@@ -199,8 +173,31 @@
             });
         </script>
         <br>
-        <button type="submit" class="btn btn-default">Разместить анкету</button>
+        <script type="text/javascript">
+            function isNumber(evt) {
+                evt = (evt) ? evt : window.event;
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+                if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                    return false;
+                }
+                return true;
+            }
+
+            function isNumber2(evt) {
+                evt = (evt) ? evt : window.event;
+                return false;
+            }
+        </script>
+
+        <label>Выберите фотографии для галереи(можно больше одной)</label>
+        <input required type="file" class="form-control" name="images[]" accept="image/*" placeholder="Фотографии"
+               multiple>
+        <br>
+
+        <button type="submit" class="btn btn-default">Сохранить изменения</button>
     </form>
+    <br>
+
 
     <hr>
     <a class="button blue" href="{{route('main')}}" role="link">К списку анкет</a>

@@ -139,19 +139,27 @@ class AnketController extends Controller
         if ($girl != null) {
             return $this->index();
         }
-        $phone = $user->phone;
-        $countries = collect(DB::select('select * from countries')); //получаем страны
-        //получаем регионы
-        $regions = collect(DB::select('select * from regions where id_country=1')); //получаем страны
-        $cities = collect(DB::select('select * from cities where id_region=1'));
+        $countries = collect(DB::select('select * from countries'));
+        $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
+            [1]));
+        $region = collect(DB::select('select * from regions where id=?',
+            [1611]))->first(); //получаем страны
+        $city = collect(DB::select('select * from cities where id=?',
+            [18499]))->first();
+        $country = collect(DB::select('select * from countries where id_country=?',
+            [1]))->first(); //получаем страны
+
+        $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
+
         $title = "Создание анкеты";
         return view('createGirl')->with([
-                'servises' => $serveses,
-                'title' => $title,
-                'phone' => $phone,
                 'countries' => $countries,
                 'regions' => $regions,
-                'cities' => $cities
+                'cityes' => $cityes,
+                'city' => $city,
+                'region' => $region,
+                'country' => $country,
+                'phone' => $user->phone
             ]
         );
     }

@@ -66,6 +66,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     Зарегистрироваться
                                 </button>
+                                <a class="button blue" href="{{route('main')}}" role="link">К списку анкет</a>
                             </div>
                         </div>
                     </form>

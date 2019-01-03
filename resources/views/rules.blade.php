@@ -6,8 +6,8 @@
     </div>
     <form action="{{route('aceptRules')}}" method="post" enctype="multipart/form-data" novalidate>
         {{ csrf_field() }}
-        <input type="checkbox" onchange="document.getElementById('sendNewSms').disabled = !this.checked;"> С првилами
-        испоьзования сайта ознакомлен и согласен
+        <input type="checkbox" onchange="document.getElementById('sendNewSms').disabled = !this.checked;">
+        <b>С правилами использования сайта ознакомлен и согласен.</b>
         <br>
         <input type="submit" class="btn btn-default" name="sendNewSms" class="inputButton" id="sendNewSms"
                value="Создать анкету" disabled/>
