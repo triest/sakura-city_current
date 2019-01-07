@@ -57,16 +57,14 @@ class MessagesController extends Controller
             ->where('resiver_id', $user->id)
             ->get();
 
-        dump($messages_resived);
-        die();
+     
         $outheher_user = $messages_sended->resiver_id;
         dump($outheher_user);
         $messages = Message::select(['text', 'sender_id', 'resiver_id', 'date', 'status'])
             ->Where('sender_id', $user->id)
             ->orWhere('resiver_id', $user->id)
             ->get();
-        dump($messages);
-        die();
+
         return view('messages.dialog')->with([
             'messages_sended' => $messages_sended,
             'messages_resived' => $messages_resived,

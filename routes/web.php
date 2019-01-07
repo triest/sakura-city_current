@@ -289,8 +289,8 @@ Route::post('/search', 'GirlsController@search')->name('search');
 Route::get('/reset', 'GirlsController@index2')->name('reset');
 
 //действия адмиистратора с анкетой
-Route::post('/admin-to-girl/', 'MessageController@adminToGirl')->name('adminToGirl');
-Route::post('/gitl-to-admin/', 'MessageController@girlToAdmin')->name('girlToAdmin');
+Route::post('/admin-to-girl/', 'MessagesController@adminToGirl')->name('adminToGirl');
+Route::post('/gitl-to-admin/', 'MessagesController@girlToAdmin')->name('girlToAdmin');
 
 
 //сообщения

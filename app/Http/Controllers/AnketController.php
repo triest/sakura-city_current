@@ -179,7 +179,7 @@ class AnketController extends Controller
         if (Auth::guest()) {
             return redirect('/login');
         }
-        dump($request);
+
 
         $girl = Girl::select([
             'name',
@@ -448,16 +448,14 @@ class AnketController extends Controller
 
         $phone = $user->phone;
 
-     //   $countries = collect(DB::select('select * from countries'));
+        //   $countries = collect(DB::select('select * from countries'));
         //$countries = collect(DB::select('select * from countries'));
         $countries = collect(DB::select('select * from countries'));
 
-
-       dump($girl);
         $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
             [$girl->country_id]));
 
-        $region= collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
+        $region = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
             [$girl->region_id]));
 
 
@@ -470,7 +468,7 @@ class AnketController extends Controller
         } else {
             $cityes = null;
         }
-     
+
         return view('editGirl')->with([
             'girl' => $girl,
             'phone' => $phone,
