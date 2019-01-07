@@ -124,35 +124,35 @@ class GirlsController extends Controller
         }
         $images = $girl->photos()->get();
         if ($girl['country_id'] != null) {
-            $country = Country::select(['name'])->where('id_country', $girl['country_id'])->first();
+            $country = Country::where('id_country', '=', $girl->country_id)
+                ->orderBy('id')
+                ->first();
         } else {
             $country = new Country();
             $country['name'] = "-";
         }
+      if ($girl->region_id= null) {
 
-        if ($girl['region_id'] != null) {
-            $region = Region::select(['name'])->where('id', $girl['region_id'])->first();
+            $region = Region::where('id_region ', '=', $girl->region_id)
+                ->orderBy('id')
+                ->first();
+            dump($region);
         } else {
             $region = new Region();
             $region['name'] = "-";
         }
+
+
         if ($girl['city_id'] != null) {
+            $city = City::where('id_city', '=', $girl->city_id)
+                ->orderBy('id')
+                ->first();
 
-            $city = City::select(['id', 'name', 'id_country', 'id_region'])->where('id', $girl['city_id'])->first();
-            if ($city != null) {
-                $id = $city->id_country;
-                $country = Country::select('id_country', 'name')
-                    ->where('id_country', $id)
-                    ->first();
-
-                $region = Region::select('id_region', 'name')
-                    ->where('id_region', $city->id_region)
-                    ->first();
-            }
         } else {
             $city = new City();
             $city['name'] = "-";
         }
+
         return view('girlView')->with([
             'girl' => $girl,
             'images' => $images,
@@ -269,14 +269,15 @@ class GirlsController extends Controller
             DB::table('girls')->where('id', $girl->id)->update(['endvip' => $end_vip]);
             DB::table('girls')->where('id', $girl->id)->update(['beginvip' => $current_date]);
             $requwest = new Request();
-            return $this->girlsShowAuchAnket($requwest);
+            return \redirect('/user/anketa');
         } else {
             echo 'Недостаточно денег.';
             $requwest = new Request();
-            return $this->girlsShowAuchAnket($requwest);
+            return \redirect('/user/anketa');
         }
         $requwest = new Request();
-        return $this->girlsShowAuchAnket($requwest);
+        //return $this->girlsShowAuchAnket($requwest);
+        return \redirect('/user/anketa');
     }
 
     public static function testFunction()

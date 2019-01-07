@@ -32,7 +32,7 @@ Route::get('/anket/{id}', 'GirlsController@showGirl')->name('showGirl');
 //пользователь соглашение
 Route::get('/Terms', 'GirlsController@showTerms')->name('showTerms')->middleware('auth');;
 Route::get('/createAnketPage', 'AnketController@createGirl')->name('createGirlPage')->middleware('auth');;
-Route::post('/anket/create', 'AnketController@Store')->name('girlsCreate')->middleware('auth');;
+Route::post('/anket/create', 'AnketController@Store')->name('girlsCreate');
 
 
 Route::post('/yandex', 'GirlsController@reciverYandex')->name('yandexPost');
@@ -121,7 +121,8 @@ Route::get('/testmail', 'GirlsController@testMail');
 
 // для администратора
 Route::get('/adminPanel', 'AdminController@getAdminPanel')->name('adminPanel')->middleware('auth');;
-Route::post('/SetPriceToFirstPlase/', 'AdminController@SetPriceToFirstPlase')->name('SetToFirstPlase')->middleware('auth');;
+Route::post('/SetPriceToFirstPlase/',
+    'AdminController@SetPriceToFirstPlase')->name('SetToFirstPlase')->middleware('auth');;
 Route::post('/SetPriceToTop/', 'AdminController@SetPriceToTop')->name('SetToTopPrice')->middleware('auth');;
 
 
@@ -178,31 +179,33 @@ Route::get('/findRegions', function () {
     $regions = Region::where('id_country', '=', $id)
         ->orderBy('id')
         ->get();
+    //dump($regions);
+
     return Response::json($regions);
 }
 );
 
 Route::get('/findCitys', function () {
     $id = Input::get('region_id');
-//    dump($id);
-   // $region= collect(DB::select('select * from regions where id=?',
-     //   [$id]));
-  // dump($region);
-    $city = collect(DB::select('SELECT * FROM `cities` WHERE `id_region`=? ',
-        [$id]));
-   //  dump($city);
+
+      /*  $city=collect(DB::select('select * from city where id_region=?',
+        [$id]));*/
+    $city=City::where('id_region', '=', $id)
+        ->orderBy('id')
+        ->get();
+
     return Response::json($city);
 });
 
 Route::get('/findCitys2', function () {
     $id = Input::get('region_id');
- //  dump($id);
-    $region= collect(DB::select('select * from regions where id_region=?',
+    //  dump($id);
+    $region = collect(DB::select('select * from regions where id_region=?',
         [$id]));
- //   dump($region);
+    //   dump($region);
     $city = collect(DB::select('SELECT * FROM `cities` WHERE `id_region`=? ',
         [$id]));
- //   dump($city);
+    //   dump($city);
     return Response::json($city);
 });
 
@@ -292,7 +295,8 @@ Route::post('/gitl-to-admin/', 'MessageController@girlToAdmin')->name('girlToAdm
 
 //сообщения
 Route::get('/messages', 'MessagesController@getMessagePage')->name('MessagePage')->middleware('auth');;
-Route::get('/messages/{girl_id}', 'MessagesController@getMessagePageAdmin')->name('MessagePageAdmin')->middleware('auth');;
+Route::get('/messages/{girl_id}',
+    'MessagesController@getMessagePageAdmin')->name('MessagePageAdmin')->middleware('auth');;
 
 Route::get('/usersList', 'AdminController@usersList')->name('usersList')->middleware('auth');;
 Route::get('/messageList', 'MessagesController@messagesList')->name('messageList')->middleware('auth');;

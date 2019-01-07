@@ -121,7 +121,7 @@
 
                     $.each(data, function (index, subcatObj) {
                         //  console.log(subcatObj.name)
-                        $('#region').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                        $('#region').append('<option value="' + subcatObj.id_region + '">' + subcatObj.name + '</option>');
                     })
                 })
                 var region_id = e.target.value;
@@ -131,16 +131,18 @@
 
             $('#region').on('change', function (e) {
                 var region_id = e.target.value;
+                console.log(region_id)
                 $('#city').empty();
                 $('#city').append('<option value="-">-</option>');
-
+               // console.log(region_id)
                 $.get('/findCitys?region_id=' + region_id, function (data) {
                     $('#city').empty();
                     $.each(data, function (index, subcatObj) {
                         console.log(subcatObj)
-                        $('#city').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                        $('#city').append('<option value="' + subcatObj.id_city + '">' + subcatObj.name + '</option>');
                     })
                 })
+
             })
 
 

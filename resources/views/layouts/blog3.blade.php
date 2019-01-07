@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
 
     <title>{{$title}}</title>
     <script src="https://getbootstrap.com/docs/3.3/assets/js/ie-emulation-modes-warning.js"></script>
     <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{asset('css/gallery-grid.css')}}">
@@ -623,8 +623,7 @@
 @include('layouts.header2');
 
 <div class="container">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+
     <div class="row row-offcanvas row-offcanvas-right">
 
         <div class="col-xs-12 col-sm-9">
@@ -692,9 +691,11 @@
                         <a href="{{route('girlsShowAuchAnket')}}">
                             <b> Управление анкетой</b>
                         </a>
-                        <a class="button green" href="{{ route('galeray')}}">Редактировать галлерею.</a><br>
+                        <a class="button green" href="{{ route('galeray')}}">Редактировать галерею</a><br>
+
+                        <a class="button blue" href="{{ route('girlsEditAuchAnket')}}">Редактировать анкету</a><br>
                     
-                        <a class="button green" href="{{ route('MessagePage') }}">Переписка с администратором.</a><br>
+                        <a class="button green" href="{{ route('MessagePage') }}">Переписка с администратором</a><br>
                     @else
                         <b> У Вас пока не создана анкета.<br>
                             Хотите создать её?</b>

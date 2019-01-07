@@ -8,7 +8,7 @@ class Region extends Model
 {
 
     protected $fillable = [
-        'name','id_country','id_region ','id'
+        'name','id_country','id_region','id'
     ];
 
 }

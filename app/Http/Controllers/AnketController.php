@@ -179,6 +179,8 @@ class AnketController extends Controller
         if (Auth::guest()) {
             return redirect('/login');
         }
+        dump($request);
+
         $girl = Girl::select([
             'name',
             'email',
@@ -229,9 +231,9 @@ class AnketController extends Controller
         //встречи
         //местоположение
         $girl->save();
-        dump($request);
 
-           $girl->save();
+
+        $girl->save();
         if (Input::hasFile('images')) {
             $count = 0;
 
@@ -252,9 +254,8 @@ class AnketController extends Controller
             $girl->country_id = null;
             $girl->save();
         } else {
-            $country = collect(DB::select('select * from countries where id_country=?',
-                [$request->country]));
-            $girl->country_id = $country[0]->id_country;
+
+            $girl->country_id = $request->country;
             $girl->save();
         }
         //region
@@ -262,26 +263,15 @@ class AnketController extends Controller
             $girl->region_id = null;
             $girl->save();
         } else {
-            $region = collect(DB::select('select * from regions where id_region=?',
-                [$request->region]));
-            $girl->region_id = $region[0]->id;
+            $girl->region_id = $request->region;
+            $girl->save();
         }
         if ($request->city == '-') {
             $girl->city_id = null;
             $girl->save();
         } else {
-            $city = collect(DB::select('select * from cities where id_city=?',
-                [$request->city]));
-            if ($city->count() == 0) {
-                $city = collect(DB::select('select * from cities where id=?', [$request->city]));
-            }
-            $girl->city_id = $city[0]->id;
-            if ($city->count() == 0) {
-                echo "empty";
-                $city = collect(DB::select('select * from cities where id=?',
-                    [$request->city]));
-                $girl->city_id = $city[0]->id;
-            }
+            $girl->city_id = $request->city;
+            $girl->save();
         }
         return redirect('/girls');
     }
@@ -455,7 +445,7 @@ class AnketController extends Controller
         if ($girl == null) {
             return $this->index();
         }
-        dump($girl);
+
         $phone = $user->phone;
         $countries = collect(DB::select('select * from countries'));
         $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
@@ -466,10 +456,10 @@ class AnketController extends Controller
             [$girl->city_id]))->first();
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
-        if ($girl->region_id!=null) {
+        if ($girl->region_id != null) {
             $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
-        }else{
-            $cityes=null;
+        } else {
+            $cityes = null;
         }
 
         return view('editGirl')->with([
@@ -547,42 +537,27 @@ class AnketController extends Controller
         }
         //тут местоположее
 
-        //country
         if ($request->country == '-') {
             $girl->country_id = null;
             $girl->save();
         } else {
-            $country = collect(DB::select('select * from countries where id_country=?',
-                [$request->country]));
-            $girl->country_id = $country[0]->id_country;
+
+            $girl->country_id = $request->country;
             $girl->save();
         }
-
         //region
         if ($request->region == '-') {
             $girl->region_id = null;
             $girl->save();
         } else {
-            $region = collect(DB::select('select * from regions where id_region=?',
-                [$request->region]));
-            $girl->region_id = $region[0]->id;
+            $girl->region_id = $request->region;
+            $girl->save();
         }
         if ($request->city == '-') {
             $girl->city_id = null;
             $girl->save();
         } else {
-            $city = collect(DB::select('select * from cities where id_city=?',
-                [$request->city]));
-            if ($city->count() == 0) {
-                $city = collect(DB::select('select * from cities where id=?', [$request->city]));
-            }
-            $girl->city_id = $city[0]->id;
-            if ($city->count() == 0) {
-                echo "empty";
-                $city = collect(DB::select('select * from cities where id=?',
-                    [$request->city]));
-                $girl->city_id = $city[0]->id;
-            }
+            $girl->city_id = $request->city;
             $girl->save();
         }
 
