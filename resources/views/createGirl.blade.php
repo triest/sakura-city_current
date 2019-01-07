@@ -85,9 +85,7 @@
         <label>Регион:
             <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region">
                 <option value="-">-</option>
-                @if($region!=null)
-                    <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
-                @endif
+
                 @foreach($regions as $region)
                     <option value="{{$region->id_region}}">{{$region->name}}</option>
                 @endforeach
@@ -96,9 +94,7 @@
 
         <label>Город:
             <select id="city" class="city" style="width: 200px" name="city">
-                @if($city!=null)
-                    <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
-                @endif
+               
                 <option value="-">-</option>
                 @foreach($cityes as $city)
                     <option value="{{$city->id_city}}">{{$city->name}}</option>

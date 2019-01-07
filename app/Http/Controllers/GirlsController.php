@@ -131,9 +131,10 @@ class GirlsController extends Controller
             $country = new Country();
             $country['name'] = "-";
         }
-      if ($girl->region_id= null) {
 
-            $region = Region::where('id_region ', '=', $girl->region_id)
+        dump($girl);
+      if ($girl['region_id']!= null) {
+            $region = Region::where('id_region', '=', $girl->region_id)
                 ->orderBy('id')
                 ->first();
             dump($region);
@@ -147,7 +148,7 @@ class GirlsController extends Controller
             $city = City::where('id_city', '=', $girl->city_id)
                 ->orderBy('id')
                 ->first();
-
+            dump($city);
         } else {
             $city = new City();
             $city['name'] = "-";

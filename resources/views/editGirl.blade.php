@@ -93,7 +93,6 @@
         <br>
 
         <!--что-бы лишний раз не меняли -->
-
         <label>Страна:
             <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
                 <option value="{{$country->id_country}}" selected>{{$country->name}}</option>
@@ -107,26 +106,15 @@
         <label>Регион:
             <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region">
                 <option value="-">-</option>
-                @if($region!=null)
-                    <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
-                @endif
-                @foreach($regions as $region)
-                    <option value="{{$region->id_region}}">{{$region->name}}</option>
-                @endforeach
+
             </select>
         </label>
 
         <label>Город:
             <select id="city" class="city" style="width: 200px" name="city">
-                @if($city!=null)
-                    <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
-                @endif
+
                 <option value="-">-</option>
-                @if($cityes!=null)
-                    @foreach($cityes as $city)
-                        <option value="{{$city->id_city}}">{{$city->name}}</option>
-                    @endforeach
-                @endif
+               
             </select>
         </label>
         <script>
@@ -145,7 +133,7 @@
 
                     $.each(data, function (index, subcatObj) {
                         //  console.log(subcatObj.name)
-                        $('#region').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                        $('#region').append('<option value="' + subcatObj.id_region + '">' + subcatObj.name + '</option>');
                     })
                 })
                 var region_id = e.target.value;
@@ -155,20 +143,24 @@
 
             $('#region').on('change', function (e) {
                 var region_id = e.target.value;
+                console.log(region_id)
                 $('#city').empty();
                 $('#city').append('<option value="-">-</option>');
-
+                // console.log(region_id)
                 $.get('/findCitys?region_id=' + region_id, function (data) {
                     $('#city').empty();
                     $.each(data, function (index, subcatObj) {
                         console.log(subcatObj)
-                        $('#city').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                        $('#city').append('<option value="' + subcatObj.id_city + '">' + subcatObj.name + '</option>');
                     })
                 })
+
             })
 
 
         </script>
+
+
         <br>
         <div class="form-group">
             <label for="exampleInputFile">Текст анкеты:</label>

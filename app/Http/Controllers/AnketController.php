@@ -447,11 +447,20 @@ class AnketController extends Controller
         }
 
         $phone = $user->phone;
+
+     //   $countries = collect(DB::select('select * from countries'));
+        //$countries = collect(DB::select('select * from countries'));
         $countries = collect(DB::select('select * from countries'));
+
+
+       dump($girl);
         $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
             [$girl->country_id]));
-        $region = collect(DB::select('select * from regions where id=?',
-            [$girl->region_id]))->first(); //получаем страны
+
+        $region= collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
+            [$girl->region_id]));
+
+
         $city = collect(DB::select('select * from cities where id=?',
             [$girl->city_id]))->first();
         $country = collect(DB::select('select * from countries where id_country=?',
@@ -461,7 +470,7 @@ class AnketController extends Controller
         } else {
             $cityes = null;
         }
-
+     
         return view('editGirl')->with([
             'girl' => $girl,
             'phone' => $phone,
