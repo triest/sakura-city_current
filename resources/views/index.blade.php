@@ -9,7 +9,7 @@
         <!--телефон -col-xs-8 -->
         <!-- сol-lg-3 компьютер-->
         <!-- сol-sm-3 планшет в альбомном -->
-        <div class="col-lg-3 col-md-3 col-sm-5 col-xs-9 ">
+        <div class="col-lg-4 col-md-3 col-sm-5 col-xs-9 ">
 
                 @if (Auth::guest())
 
@@ -28,7 +28,7 @@
                 </h4>
 
         </div>
-       <div class="col-md-1"></div>
+
     @endforeach
 
 
