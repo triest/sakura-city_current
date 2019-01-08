@@ -92,6 +92,7 @@
         @endif
         <br>
 
+
         <!--что-бы лишний раз не меняли -->
         <label>Страна:
             <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
@@ -105,16 +106,23 @@
         </label>
         <label>Регион:
             <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region">
+                <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
                 <option value="-">-</option>
-
+                @foreach($regions as $region)
+                    <option value="{{$region->id_region}}">{{$region->name}}</option>
+                @endforeach
             </select>
         </label>
 
         <label>Город:
             <select id="city" class="city" style="width: 200px" name="city">
-
+                <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
                 <option value="-">-</option>
-               
+                @if($cityes!=null)
+                    @foreach($cityes as $city2)
+                        <option value="{{$city2->id_city}}">{{$city2->name}}</option>
+                    @endforeach
+                @endif
             </select>
         </label>
         <script>

@@ -8,8 +8,9 @@
     @foreach($girls as $girl)
         <!--телефон -col-xs-8 -->
         <!-- сol-lg-3 компьютер-->
-        <div class="col-lg-4 col-md-6 col-sm-8 col-xs-9 portfolio-item">
-            <div class="card h-100">
+        <!-- сol-sm-3 планшет в альбомном -->
+        <div class="col-lg-3 col-md-3 col-sm-5 col-xs-9 ">
+
                 @if (Auth::guest())
 
                 @elseif(Auth::user()->isAdmin==1)
@@ -19,15 +20,15 @@
                 <!--выводим сообщение, что забанен -->
                 @endif
                 <a href="{{route('showGirl',['id'=>$girl->id])}}">
-                    <img height="250" width="250"
+                    <img height="250" width="350"
                          src="<?php echo asset("public/images/upload/$girl->main_image")?>"></a>
                 </a>
                 <h4 class="card-title">
                     <b> <a href="{{route('showGirl',['id'=>$girl->id])}}">{{$girl->name}}</a></b>
                 </h4>
-            </div>
+
         </div>
-        <div class="col-md-1"></div>
+       <div class="col-md-1"></div>
     @endforeach
 
 

@@ -47,19 +47,19 @@ class MessagesController extends Controller
         if ($user == null) {
             return redirect('/login');
         }
-        dump($user);
+
         $messages_sended = Message::select(['text', 'sender_id', 'resiver_id', 'date', 'status'])
             ->where('sender_id', $user->id)
             ->get();
 
-        dump($messages_sended);
+
         $messages_resived = Message::select(['text', 'sender_id', 'resiver_id', 'date', 'status'])
             ->where('resiver_id', $user->id)
             ->get();
 
-     
+
         $outheher_user = $messages_sended->resiver_id;
-        dump($outheher_user);
+
         $messages = Message::select(['text', 'sender_id', 'resiver_id', 'date', 'status'])
             ->Where('sender_id', $user->id)
             ->orWhere('resiver_id', $user->id)
@@ -124,7 +124,8 @@ class MessagesController extends Controller
             $text = "sakura-city.info. У вас новое сообщение от администратора! Ваша анкета заблокированна.";
         }
         $this->SendSMS($girl->phone, $text);
-        return $this->showGirl($girl->id);
+        return redirect('/girls');
+        //  return $this->showGirl($girl->id);
     }
 
     public function getMessagePage()
@@ -233,4 +234,41 @@ class MessagesController extends Controller
 
     }
 
+    public function SendSMS($phone, $text)
+    {
+        $src = '<?xml version="1.0" encoding="UTF-8"?>
+        <SMS>
+            <operations>
+            <operation>SEND</operation>
+            </operations>
+            <authentification>
+            <username>sakura-city@rambler.ru</username>
+            <password>22d2af28</password>
+            </authentification>
+            <message>
+            <sender>SMS</sender>
+            <text>' . $text . '</text>
+            </message>
+            <numbers>
+            <number messageID="msg11">' . $phone . '</number>
+            </numbers>
+        </SMS>';
+
+        $Curl = curl_init();
+        $CurlOptions = array(
+            CURLOPT_URL => 'http://api.atompark.com/members/sms/xml.php',
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_POST => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 15,
+            CURLOPT_TIMEOUT => 100,
+            CURLOPT_POSTFIELDS => array('XML' => $src),
+        );
+        curl_setopt_array($Curl, $CurlOptions);
+        if (false === ($Result = curl_exec($Curl))) {
+            throw new Exception('Http request failed');
+        }
+        curl_close($Curl);
+    }
 }

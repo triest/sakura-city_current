@@ -455,19 +455,21 @@ class AnketController extends Controller
         $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
             [$girl->country_id]));
 
-        $region = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
+        $region = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_region`=?',
             [$girl->region_id]));
 
+        $region=$region[0];
 
-        $city = collect(DB::select('select * from cities where id=?',
+        $cityes=collect(DB::select('select * from cities where id_region=?',
+            [$girl->region_id]));
+
+        $city = collect(DB::select('select * from cities where id_city=?',
             [$girl->city_id]))->first();
+
+
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
-        if ($girl->region_id != null) {
-            $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
-        } else {
-            $cityes = null;
-        }
+
 
         return view('editGirl')->with([
             'girl' => $girl,
@@ -572,5 +574,43 @@ class AnketController extends Controller
         $girl->save();
         //    return $this->girlsEditAuchAnket();
         return redirect('/anket');
+    }
+
+    public function SendSMS($phone, $text)
+    {
+        $src = '<?xml version="1.0" encoding="UTF-8"?>
+        <SMS>
+            <operations>
+            <operation>SEND</operation>
+            </operations>
+            <authentification>
+            <username>sakura-city@rambler.ru</username>
+            <password>22d2af28</password>
+            </authentification>
+            <message>
+            <sender>SMS</sender>
+            <text>' . $text . '</text>
+            </message>
+            <numbers>
+            <number messageID="msg11">' . $phone . '</number>
+            </numbers>
+        </SMS>';
+
+        $Curl = curl_init();
+        $CurlOptions = array(
+            CURLOPT_URL => 'http://api.atompark.com/members/sms/xml.php',
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_POST => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 15,
+            CURLOPT_TIMEOUT => 100,
+            CURLOPT_POSTFIELDS => array('XML' => $src),
+        );
+        curl_setopt_array($Curl, $CurlOptions);
+        if (false === ($Result = curl_exec($Curl))) {
+            throw new Exception('Http request failed');
+        }
+        curl_close($Curl);
     }
 }
