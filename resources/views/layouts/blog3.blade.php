@@ -617,6 +617,9 @@
         }
     </style>
 
+
+    <!--Yandex -->
+    <meta name="yandex-verification" content="af4168af7d682a89" />
 </head>
 
 <body>
@@ -662,7 +665,7 @@
                 @if (Auth::guest())
 
                     <a class="button green" href="{{ route('login') }}">Войти</a><br>
-                    <a class="button blue" href="{{ route('register') }}">Зарегистрироваться</a>
+                    <a class="button blue" href="{{ route('join') }}">Зарегистрироваться</a>
                 @else
                     <b> Вы вошли как</b> <b>{{Auth::user()->name}}</b>
                     <a href="{{ route('logout') }}"

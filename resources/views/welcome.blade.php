@@ -292,6 +292,7 @@
             box-shadow: inset 0 10px 15px 0 #79b9d2;
         }
     </style>
+    <meta name="yandex-verification" content="af4168af7d682a89" />
 </head>
 <body>
 <div class="flex-center position-ref full-height">

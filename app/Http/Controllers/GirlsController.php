@@ -340,6 +340,10 @@ class GirlsController extends Controller
         echo 'senbded';
     }
 
+    public function sendSmsTest(){
+        return $this->SendSMS("79535357524", "test");
+    }
+
     private function SendMesageTOConfernd($token, $mail)
     {
         Mail::send('email.confernemail', ['name' => 'testname', 'token' => $token], function ($message) use ($mail) {

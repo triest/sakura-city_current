@@ -90,6 +90,33 @@ Route::get('/sendSMS', function () {
 }
 );
 
+Route::get('/sendSMS2', function () {
+    $phone = Input::get('phone');
+    // dump($phone);
+    $user = collect(DB::select('select * from users where phone like ?', [$phone]))->first();
+    //   dump($user);
+    if ($user == null) {
+        echo 'user not found';
+        return Response::json($user);
+    }
+
+    //если найден,то
+    //1)генерируем проль для отправки
+
+    $activeCode = rand(1000, 9999);
+    //  $this->sendSMS($user->phone,$activeCode);
+    // $activeCode=1111;
+    //2) отправляем его в смс
+    App::call('App\Http\Controllers\GirlsController@sendSMS', [$user->phone, $activeCode]);
+
+    //теперь запишем его в БД
+    DB::update('update users set smsResetCode = ? where id = ?', [$activeCode, $user->id]);
+
+
+    return Response::json(['result' => 'ok']);
+}
+);
+
 //
 Route::get('/sendCODE', function () {
     $code = Input::get('code');
@@ -135,7 +162,7 @@ Route::get('/confirnEmail', 'GirlsController@MailtoConfurn')->name('sendConfurmE
 Route::get('/user/confernd/{token}', 'GirlsController@conferndEmail')->name('conferndEmail');
 
 //смс
-Route::get('/sms', 'GirlsController@sendmail');
+Route::get('/sms', 'GirlsController@sendSmsTest');
 
 //ввод номера телефона
 Route::get('/inputphone', function () {
@@ -188,9 +215,9 @@ Route::get('/findRegions', function () {
 Route::get('/findCitys', function () {
     $id = Input::get('region_id');
 
-      /*  $city=collect(DB::select('select * from city where id_region=?',
-        [$id]));*/
-    $city=City::where('id_region', '=', $id)
+    /*  $city=collect(DB::select('select * from city where id_region=?',
+      [$id]));*/
+    $city = City::where('id_region', '=', $id)
         ->orderBy('id')
         ->get();
 
@@ -301,3 +328,9 @@ Route::get('/messages/{girl_id}',
 Route::get('/usersList', 'AdminController@usersList')->name('usersList')->middleware('auth');;
 Route::get('/messageList', 'MessagesController@messagesList')->name('messageList')->middleware('auth');;
 Route::get('/moneyHistory', 'AdminController@moneyHistory')->name('moneyHistory')->middleware('auth');;
+
+//custom user
+//Route::get('/custom', 'CustomUserController@index')->name('custom');
+Route::get('/join/', 'CustomUserController@index')->name('join');
+Route::post('/join/new', 'CustomUserController@join')->name('joinStore');
+Route::get('/continion/', 'AnketController@createGirl')->name('continion');

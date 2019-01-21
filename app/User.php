@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-    'name', 'email', 'password','token','is_conferd','active','money','isAdmin','email_token','phone','phone_conferd','actice_code','akcept','smsResetCode'];
+    'name', 'email', 'password','token','is_conferd','active','money','isAdmin','email_token','phone','phone_conferd','actice_code','akcept','smsResetCode','password','you','kogo'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -56,6 +56,8 @@ class User extends Authenticatable
         return $girl;
 
     }
+
+    
 
     //создаем токен
     public function createMailConfermationToke() {
