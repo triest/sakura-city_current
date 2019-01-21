@@ -1,4 +1,4 @@
-@extends('layouts.blog3', ['title' => 'Редактирование анкеты'])
+@extends('layouts.blog3', ['title' => 'Создание анкеты'])
 
 @section('content')
 
@@ -153,6 +153,13 @@
             <font color="red"><p class="errors">{{$errors->first('description')}}</p></font>
         @endif
 
+        <div class="form-group">
+            <label for="exampleInputFile">Приватный текст, который видно только тем, кому вы откроете доступ:</label>
+            <textarea name="private" required> </textarea>
+        </div>
+        @if($errors->has('private'))
+            <font color="red"><p class="errors">{{$errors->first('private')}}</p></font>
+        @endif
 
         <input type="hidden" value="{{csrf_token()}}" name="_token">
 

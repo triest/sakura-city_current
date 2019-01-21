@@ -17,6 +17,7 @@ class Girl extends Model
         'id',
         'phone',
         'description',
+        'private',
         'enabled',
         'payday',
         'payed',

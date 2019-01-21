@@ -103,7 +103,7 @@ Route::get('/sendSMS2', function () {
     $user = Auth::user();
     //если найден,то
     //1)генерируем проль для отправки
-
+     $user->phone=$phone;
     $activeCode = rand(1000, 9999);
     $user->actice_code = $activeCode;
     $user->save();

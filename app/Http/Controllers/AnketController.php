@@ -149,6 +149,7 @@ class AnketController extends Controller
         $cityes = collect(DB::select('select * from `cities` where `id_region`=?', [$region->id_region]));
 
         $title = "Создание анкеты";
+
         return view('createGirl')->with([
                 'countries' => $countries,
                 'regions' => $regions,
@@ -170,6 +171,7 @@ class AnketController extends Controller
             'age' => 'required|numeric|min:18',
             'met' => 'required',
             'description' => 'required',
+            'private' => 'required',
             'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         $user = Auth::user();
@@ -225,6 +227,7 @@ class AnketController extends Controller
         $girl['age'] = $request['age'];
         $girl['sex'] = $request['sex'];
         $girl['meet'] = $request['met'];
+        $girl['private']=$request['private'];
         //встречи
         //местоположение
         $girl->save();
@@ -455,9 +458,9 @@ class AnketController extends Controller
         $region = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_region`=?',
             [$girl->region_id]));
 
-        $region=$region[0];
+        $region = $region[0];
 
-        $cityes=collect(DB::select('select * from cities where id_region=?',
+        $cityes = collect(DB::select('select * from cities where id_region=?',
             [$girl->region_id]));
 
         $city = collect(DB::select('select * from cities where id_city=?',
