@@ -11,7 +11,7 @@
                 <label>Введите код</label>
                 <input type="text" class="form-control" id="code" name="code" onkeypress="return isNumber(event)"
                        required></input>
-                <a class="button green" id="inputCode">Ввести код</a><br>
+                <a class="button green" id="inputCode2">Ввести код</a><br>
 
 
                 <!--   <button id="button2" style="display:none;" hred="http://sakura-city.info/password/reset/" this.style.display = 'none';">Сбросить пароль</button>-->
@@ -77,7 +77,7 @@
                     .then(
                         response => {
                             console.log(response.data);
-                            if (response.data.andwer == "ok") {
+                            if (response.data.answer == "ok") {
                                 var formID = document.getElementById("passform")
                                 formID.style.display = "block"
                                 document.getElementById("user").value = response.data.token;

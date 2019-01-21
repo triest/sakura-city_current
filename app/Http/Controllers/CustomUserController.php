@@ -49,7 +49,7 @@ class CustomUserController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             if ($user->phone_conferd == 1) {
-            
+                return redirect('anket');
             } else {
                 return view('custom.resetSMS');
             }

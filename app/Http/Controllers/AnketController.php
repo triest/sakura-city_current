@@ -123,18 +123,11 @@ class AnketController extends Controller
         if (Auth::guest()) {
             return redirect('/login');
         }
-        if ($user->akcept == 0) {
-            return view('rules');
-        }
+
         if ($user->is_conferd == 0) {
             return view('conferntEmail')->with(['email' => $user->email]);
         }
-        if ($user->phone == null) {
-            return view('inputphone');
-        }
-        if ($user->phone_conferd == 0) {
-            return view('inputphone');
-        }
+      
         //проверяем, вдруг анкета уже есть.
         if ($girl != null) {
             return $this->index();
