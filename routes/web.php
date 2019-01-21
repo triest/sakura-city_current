@@ -95,27 +95,43 @@ Route::get('/sendSMS2', function () {
     // dump($phone);
     $user = collect(DB::select('select * from users where phone like ?', [$phone]))->first();
     //   dump($user);
-    if ($user == null) {
-        echo 'user not found';
+    if ($user != null) {
+        echo 'Phone alredy exist!';
         return Response::json($user);
     }
 
+    $user = Auth::user();
     //если найден,то
     //1)генерируем проль для отправки
 
     $activeCode = rand(1000, 9999);
-    //  $this->sendSMS($user->phone,$activeCode);
-    // $activeCode=1111;
+    $user->actice_code = $activeCode;
+    $user->save();
+
     //2) отправляем его в смс
-    App::call('App\Http\Controllers\GirlsController@sendSMS', [$user->phone, $activeCode]);
-
-    //теперь запишем его в БД
-    DB::update('update users set smsResetCode = ? where id = ?', [$activeCode, $user->id]);
-
+    // App::call('App\Http\Controllers\GirlsController@sendSMS', [$phone, $activeCode]);
 
     return Response::json(['result' => 'ok']);
 }
 );
+
+Route::get('/sendCODE2', function () {
+    $code = Input::get('code');
+
+    $user = Auth::user();
+    if ($user->phone_conferd == 1) {
+        return Response::json(['result' => 'alredy']);
+    }
+    if ($code == $user->actice_code) {
+        $user->phone_conferd = 1;
+        $user->save();
+        return Response::json(['answer' => 'ok']);
+    } else {
+        return Response::json(['result' => 'fail']);
+    }
+}
+);
+
 
 //
 Route::get('/sendCODE', function () {

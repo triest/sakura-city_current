@@ -47,6 +47,12 @@ class CustomUserController extends Controller
     function index()
     {
         if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->phone_conferd == 1) {
+            
+            } else {
+                return view('custom.resetSMS');
+            }
 
         }
         return view('custom.registration');
@@ -69,21 +75,8 @@ class CustomUserController extends Controller
         $user->kogo = $request->kogo;
         $user->password = bcrypt($request->password);
         $user->save();
-      
-
         Auth::loginUsingId($user->id);
-
         return view('custom.resetSMS');
-        /*
-         *  "step" => "2"
-              "join" => "yes"
-              "you" => "m"
-              "kogo" => "w"
-              "name" => "ttttttt"
-              "email" => "triest21@gmail.com"
-              "password" => "22d2af28"
-         * */
-
 
     }
 

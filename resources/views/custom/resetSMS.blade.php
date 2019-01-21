@@ -1,4 +1,4 @@
-@extends('layouts.blog3', ['title' => 'Сброс пароля по SMS'])
+@extends('layouts.blog3', ['title' => 'Подтверждение SMS'])
 
 @section('content')
     <div class="row">
@@ -14,16 +14,13 @@
                 <a class="button green" id="inputCode">Ввести код</a><br>
 
 
-
-
-
                 <!--   <button id="button2" style="display:none;" hred="http://sakura-city.info/password/reset/" this.style.display = 'none';">Сбросить пароль</button>-->
 
 
             </div>
         </div>
     </div>
-
+    <a class="button blue" href="{{route('main')}}" role="link">К списку анкет</a>
     <!--   <button id="button2" style="display:none;" onclick="document.getElementById('button1').style.display = 'block'; this.style.display = 'none';">Сбросить пароль</button>
     -->
 
@@ -65,7 +62,7 @@
                     // error=>console.log(error)
                 )
         }),
-            $('#inputCode').on('click', function (e) {
+            $('#inputCode2').on('click', function (e) {
                 console.log("input code")
                 var code = document.getElementById('code').value;
                 var phone = document.getElementById('phone').value;
@@ -76,7 +73,7 @@
                       var obj = jQuery.parseJSON(data.body);
                       alert(obj.rezult);
                   })*/
-                axios.get('/sendCODE?code=' + code + '&phone=' + phone)
+                axios.get('/sendCODE2?code=' + code + '&phone=' + phone)
                     .then(
                         response => {
                             console.log(response.data);

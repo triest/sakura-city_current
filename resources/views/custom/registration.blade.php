@@ -13,7 +13,8 @@
         <div class=''>
             <div class='panel-body'>
 
-                <form action="{{route('joinStore')}}" class='form-horizontal joinForm' role='form' id='joinForm' method='POST' >
+                <form action="{{route('joinStore')}}" class='form-horizontal joinForm' role='form' id='joinForm'
+                      method='POST'>
                     {{ csrf_field() }}
                     <input type='hidden' name='step' value='2'>
                     <input type='hidden' name='join' value='yes'>
@@ -50,31 +51,36 @@
 
 
                             <label>Ваше имя</label>
-                            <input type='text' name='name' class='text-input  ' value='' required>
+                            <input type='text' name='name' class='text-input  ' value='{{old('name')}}' required>
+                            @if($errors->has('name'))
+                                <font color="red"><p>  {{$errors->first('name')}}</p></font>
+                            @endif
 
                             <p class='mailHint'></p>
                             <label>Ваш email</label>
-                            <input type='text' name='email' class='text-input  ' value='' required>
+                            <input type='text' name='email' class='text-input  ' value={{old('email')}} required>
+                            @if($errors->has('email'))
+                                <font color="red"><p>  {{$errors->first('email')}}</p></font>
+                            @endif
 
 
                             <p class='mailHint'></p>
                             <label>Пароль</label>
-                            <input type='text' name='password' class='text-input  ' value='' required>
+                            <input type='text' name='password' class='text-input  ' value='{{old('password')}}'
+                                   required>
+                            @if($errors->has('password'))
+                                <font color="red"><p>  {{$errors->first('password')}}</p></font>
+                            @endif
 
+                            <div>
+                                <p class='Login-helpText'>Продолжая, вы соглашаетесь с <a href=/rules
+                                                                                          rel='nofollow'>правилами</a>
+                                    сайта Sakura-city и подтверждаете что вам больше 18 лет. Запрещается
+                                    продвигать незаконную коммерческую деятельность (например,
+                                    проституцию). </p>
+                            </div>
+                            <button type="submit" class="btn btn-default">Зарегистрироваться</button>
 
-                            <p class='mailHint'></p>
-
-                            <span id='suggestion'></span>
-
-                                <button class='submit'>Создать анкету</button>
-                                <div>
-                                    <p class='Login-helpText'>Продолжая, вы соглашаетесь с <a href=/rules
-                                                                                              rel='nofollow'>правилами</a>
-                                        сайта Sakura-city и подтверждаете что вам больше 18 лет. Запрещается
-                                        продвигать незаконную коммерческую деятельность (например,
-                                        проституцию). </p>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                 </form>
