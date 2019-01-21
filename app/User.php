@@ -35,6 +35,10 @@ class User extends Authenticatable
         return $this->hasOne('App\Girl');
     }
 
+    public function user(){
+        return $this->hasMany('App\User');
+    }
+
     //проверка есть ли анкета
     public function anketisExsis(){
         $rez=Cache::has('anket-is-exsist-'.$this->id); //получаем id анкеты
