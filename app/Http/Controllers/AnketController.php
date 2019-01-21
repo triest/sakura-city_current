@@ -124,10 +124,14 @@ class AnketController extends Controller
             return redirect('/login');
         }
 
+        if ($user->phone_conferd == 0) {
+            return view('custom.resetSMS');
+        }
+
         if ($user->is_conferd == 0) {
             return view('conferntEmail')->with(['email' => $user->email]);
         }
-      
+
         //проверяем, вдруг анкета уже есть.
         if ($girl != null) {
             return $this->index();

@@ -13,10 +13,9 @@
                        required></input>
                 <a class="button green" id="inputCode2">Ввести код</a><br>
 
-
                 <!--   <button id="button2" style="display:none;" hred="http://sakura-city.info/password/reset/" this.style.display = 'none';">Сбросить пароль</button>-->
 
-
+                <button  h role="link" id="createGirlPage" onclick=" relocate_home()" disabled>Создать анкету</button>
             </div>
         </div>
     </div>
@@ -31,6 +30,11 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
     <script>
+        function relocate_home()
+        {
+            location.href = "http://sakura-city.info/createAnketPage";
+        }
+
         function isNumber(evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -78,9 +82,9 @@
                         response => {
                             console.log(response.data);
                             if (response.data.answer == "ok") {
-                                var formID = document.getElementById("passform")
-                                formID.style.display = "block"
-                                document.getElementById("user").value = response.data.token;
+                                var formID = document.getElementById("confurnButton")
+                                console.log("ok");
+                                document.getElementById('createGirlPage').disabled =false;
                             }
                             else {
                                 alert("Ошибка. Неверный код!")
