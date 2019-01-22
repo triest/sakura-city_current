@@ -9,7 +9,7 @@
         <br>
         <div class="form-group">
             <label for="title">Имя:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="" required>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="{{$user->name}}" readonly required>
         </div>
         @if($errors->has('name'))
             <font color="red"><p>  {{$errors->first('name')}}</p></font>
@@ -20,7 +20,7 @@
             <div class="form-group">
                 <label for="phone">Ваш телефон:</label>
                 <!--   <input type="tel" class="form-control" id="phone" name="phone" pattern="^\(\d{3}\)\d{3}-\d{2}-\d{2}$" required></input>-->
-                <input type="tel" class="form-control" id="phone" name="phone" value="{{$phone}}" readonly
+                <input type="tel" class="form-control" id="phone" name="phone" value="{{$user->phone}}" readonly
                        required></input>
             </div>
         </div>

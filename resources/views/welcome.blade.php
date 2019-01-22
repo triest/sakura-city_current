@@ -302,7 +302,7 @@
 
             @else
                 <a href="{{ url('/login') }}">Войти</a>
-                <a href="{{ url('/register') }}">Зарегистрироваться</a>
+                <a href="{{ url('/join') }}">Зарегистрироваться</a>
             @endif
         </div>
     @endif

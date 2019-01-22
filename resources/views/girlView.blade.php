@@ -41,7 +41,6 @@
         <p class="card-text"><b>Рост : {{$girl->height}}</b>
         <p class="card-text"><b>Вес : {{$girl->weight}}</b>
         <p class="card-text"><b>Возраст : {{$girl->age}}</b>
-        <p class="card-text"><b>Телефон : <a href="tel:+{{$girl->phone}}">+{{$girl->phone}}</a></b></p>
         <p class="card-text"><b>Страна: {{$country->name}}
         <p class="card-text"><b>Регион: @if ($region!=null) {{$region->name}} @endif
         <p class="card-text"><b>Город: @if ($city!=null) {{$city->name}} @endif
@@ -53,6 +52,11 @@
                 <b> мужчиной</b>
         @endif
         <p class="card-text"><b> {!!$girl->description  !!}</b></p>
+
+        @if($girl->private!=null):
+            <label>Приватное сообщение</label>
+            <p class="card-text>"><b>{!!$girl->private  !!}<</b></p>
+        @endif
     </div>
     <br>
     <div class="container gallery-container">
@@ -82,8 +86,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
     <script>
         baguetteBox.run('.tz-gallery');
-        function relocate_home()
-        {
+
+        function relocate_home() {
             location.href = "www.yoursite.com";
         }
     </script>

@@ -157,7 +157,8 @@ class AnketController extends Controller
                 'city' => $city,
                 'region' => $region,
                 'country' => $country,
-                'phone' => $user->phone
+                'phone' => $user,
+                'user'=>$user
             ]
         );
     }

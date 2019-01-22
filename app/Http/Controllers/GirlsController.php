@@ -101,7 +101,6 @@ class GirlsController extends Controller
             'email',
             'password',
             'id',
-            'phone',
             'description',
             'enabled',
             'payday',
@@ -116,9 +115,9 @@ class GirlsController extends Controller
             'country_id',
             'region_id',
             'city_id',
-            'banned'
+            'banned',
+            'user_id'
         ])->where('id', $id)->first();
-
         if ($girl == null) {
             return $this->index();
         }
@@ -154,6 +153,42 @@ class GirlsController extends Controller
             $city['name'] = "-";
         }
 
+        $AythUser = Auth::user();
+
+        //проверяем, что просматривающий пользователь зареген.
+        if ($AythUser != null) {
+            //  $girl_user_id=$girl->user_id;
+            $user3 = DB::table('user_user')
+                ->where('my_id', $AythUser->id)
+                ->where('other_id', $girl->user_id)->first();
+
+            if ($user3 != null) {
+                $girl = Girl::select([
+                    'name',
+                    'email',
+                    'password',
+                    'id',
+                    'description',
+                    'enabled',
+                    'payday',
+                    'phone',
+                    'private',
+                    'payed',
+                    'login',
+                    'main_image',
+                    'sex',
+                    'meet',
+                    'weight',
+                    'height',
+                    'age',
+                    'country_id',
+                    'region_id',
+                    'city_id',
+                    'banned'
+                ])->where('id', $id)->first();
+            }
+        }
+    
         return view('girlView')->with([
             'girl' => $girl,
             'images' => $images,
@@ -340,7 +375,8 @@ class GirlsController extends Controller
         echo 'senbded';
     }
 
-    public function sendSmsTest(){
+    public function sendSmsTest()
+    {
         return $this->SendSMS("79535357524", "test");
     }
 
