@@ -1,0 +1,41 @@
+<?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+//use Doctrine\Common\Cache\Cache;
+use Illuminate\Support\Facades\Cache;
+use Closure;
+use App\Girl;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
+use App\Message;
+
+
+class MyRequwest extends Model
+{
+
+    protected $table = 'requwest';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'who_id',
+        'target_id'
+    ];
+
+    public function who()
+    {
+        return $this->hasMany('App\User');
+    }
+
+    public function target()
+    {
+        return $this->hasMany('App\User');
+    }
+
+}

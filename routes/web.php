@@ -103,13 +103,13 @@ Route::get('/sendSMS2', function () {
     $user = Auth::user();
     //если найден,то
     //1)генерируем проль для отправки
-     $user->phone=$phone;
+    $user->phone = $phone;
     $activeCode = rand(1000, 9999);
     $user->actice_code = $activeCode;
     $user->save();
 
     //2) отправляем его в смс
-    // App::call('App\Http\Controllers\GirlsController@sendSMS', [$phone, $activeCode]);
+    App::call('App\Http\Controllers\GirlsController@sendSMS', [$phone, $activeCode]);
 
     return Response::json(['result' => 'ok']);
 }
@@ -350,3 +350,7 @@ Route::get('/moneyHistory', 'AdminController@moneyHistory')->name('moneyHistory'
 Route::get('/join/', 'CustomUserController@index')->name('join');
 Route::post('/join/new', 'CustomUserController@join')->name('joinStore');
 Route::get('/continion/', 'AnketController@createGirl')->name('continion');
+
+//приватный доступ
+//makePrivateRequwest
+Route::get('/privateRequwest/{id}', 'PrivateController@makeRequwest')->name('makePrivateRequwest')->middleware('auth');;

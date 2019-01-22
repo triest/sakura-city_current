@@ -22,6 +22,14 @@
         </form>
         <b><a href="{{route('MessagePageAdmin',['girl_id'=>$girl->id])}}">Сообщения пользователя</a></b>
 
+        <!--запрос на добавление доступа -->
+    @endif
+    @if (Auth::guest())
+    @elseif(Auth::user()->anketisExsis()!=null)
+        @if ($girl->private==null)
+            <b> <a href="{{route('makePrivateRequwest',['id'=>$girl->id])}}">Запросить доступ к приватной
+                    информации</a></b>
+        @endif
     @endif
     <br>
 
@@ -54,8 +62,8 @@
         <p class="card-text"><b> {!!$girl->description  !!}</b></p>
 
         @if($girl->private!=null):
-            <label>Приватное сообщение</label>
-            <p class="card-text>"><b>{!!$girl->private  !!}<</b></p>
+        <label>Приватное сообщение</label>
+        <p class="card-text>"><b>{!!$girl->private  !!}<</b></p>
         @endif
     </div>
     <br>

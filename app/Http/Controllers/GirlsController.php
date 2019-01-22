@@ -188,7 +188,7 @@ class GirlsController extends Controller
                 ])->where('id', $id)->first();
             }
         }
-    
+
         return view('girlView')->with([
             'girl' => $girl,
             'images' => $images,
