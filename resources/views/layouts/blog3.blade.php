@@ -619,7 +619,7 @@
 
 
     <!--Yandex -->
-    <meta name="yandex-verification" content="af4168af7d682a89" />
+    <meta name="yandex-verification" content="af4168af7d682a89"/>
 </head>
 
 <body>
@@ -652,6 +652,18 @@
                         <a class="button green" href="{{ route('MessagePage') }}">Прочитать</a><br>
                     @endif
                 @endif
+            @endif
+
+        <!--Запрос на то, есть ли запросы на открытие анкеты -->
+            @if (Auth::guest())
+            @else
+                <?php if ($girl = Auth::user()->anketisExsis()) {
+                if ($girl->hasRequwest() != null) {
+                ?>
+
+                <b>У вас есть запросы на открытие анкеты!</b>
+                    <a class="button blue" href="{{route('main')}}" role="link" onclick=" relocate_home()">Посмотреть запросы</a>
+                <? }} ?>
             @endif
 
 
@@ -697,7 +709,7 @@
                         <a class="button green" href="{{ route('galeray')}}">Редактировать галерею</a><br>
 
                         <a class="button blue" href="{{ route('girlsEditAuchAnket')}}">Редактировать анкету</a><br>
-                    
+
                         <a class="button green" href="{{ route('MessagePage') }}">Переписка с администратором</a><br>
                     @else
                         <b> У Вас пока не создана анкета.<br>

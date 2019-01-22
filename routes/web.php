@@ -17,6 +17,7 @@ use App\City;
 use App\Girl;
 use App\User;
 
+
 Route::get('/', function () {
     return view('welcome');
 });

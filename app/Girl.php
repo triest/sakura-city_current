@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Comment;
 use App\Message;
 use Auth;
+use DB;
 
 class Girl extends Model
 {
@@ -98,5 +99,26 @@ class Girl extends Model
             }
             return null;
         }
+    }
+
+    function isTarget($user_id)
+    {
+        $user = Auth::user();
+        //выбирем в запросах, есть ли запрос от авторизованного user для данной анкеты
+        $rez = DB::select('select * from requwest where who_id=? and  target_id=?', [$user->id, $user_id]);
+        $rez = $rez[0];
+        return $rez;
+    }
+
+    //возвращает, есть ли запросы на добавление на открытие приватной инфомации в анкете
+    function hasRequwest()
+    {
+        $user = Auth::user();
+        $rez = DB::select('select * from requwest where  target_id=?', [$user->id]);
+        if ($rez==null){
+            return null;
+        }
+        $rez = $rez[0];
+        return $rez;
     }
 }

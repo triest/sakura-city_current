@@ -26,10 +26,17 @@
     @endif
     @if (Auth::guest())
     @elseif(Auth::user()->anketisExsis()!=null)
-        @if ($girl->private==null)
-            <b> <a href="{{route('makePrivateRequwest',['id'=>$girl->id])}}">Запросить доступ к приватной
-                    информации</a></b>
-        @endif
+        <? $target = $girl->isTarget($girl->user_id);
+        if ($target != null) { ?>
+        <b>Вы отправили запрос на открытие приватной части анкеты (телефон и приватное описание)</b> <br>
+        <?
+        }
+        else{
+        if ($girl->private == null){ ?>
+        <b> <a href="{{route('makePrivateRequwest',['id'=>$girl->id])}}">Запросить доступ к приватной
+                информации</a></b> <?
+        }
+        } ?>
     @endif
     <br>
 
