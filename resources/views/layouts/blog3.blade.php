@@ -662,7 +662,8 @@
                 ?>
 
                 <b>У вас есть запросы на открытие анкеты!</b>
-                    <a class="button blue" href="{{route('requwestForMe')}}" role="link" onclick=" relocate_home()">Посмотреть запросы</a>
+                <a class="button blue" href="{{route('requwestForMe')}}" role="link" onclick=" relocate_home()">Посмотреть
+                    запросы</a>
                 <? }} ?>
             @endif
 
@@ -708,9 +709,14 @@
                         </a>
                         <a class="button green" href="{{ route('galeray')}}">Редактировать галерею</a><br>
 
+                        <a class="button green" href="{{ route('main')}}">Список анкет</a><br>
+
                         <a class="button blue" href="{{ route('girlsEditAuchAnket')}}">Редактировать анкету</a><br>
 
                         <a class="button green" href="{{ route('MessagePage') }}">Переписка с администратором</a><br>
+
+                        <a class="button blue" href="{{ route('requwestForMe') }}">Запросы на открытие анкеты</a><br>
+
                     @else
                         <b> У Вас пока не создана анкета.<br>
                             Хотите создать её?</b>
