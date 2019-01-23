@@ -361,3 +361,5 @@ Route::get('/requwestForMe', 'PrivateController@requwestForMe')->name('requwestF
 
 //предоставить доступ
 Route::get('/makeAccess/{id}', 'PrivateController@makeAccess')->name('makeAccess')->middleware('auth');;
+
+Route::get('/denadeAccess/{id}', 'PrivateController@denideAccess')->name('denideAccess')->middleware('auth');;

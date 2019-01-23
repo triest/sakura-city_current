@@ -97,22 +97,28 @@ class PrivateController extends Controller
     {
 
         $user = Auth::user();
-        //  $price_toTop = collect(DB::select('select price from servises where name=\'toTop\' '))->first(); //получили цену
-
         $request = collect(DB::select('select * from requwest where target_id=?', [$user->id]));
 
-        $request=MyRequwest::select( 'id',
+        $request = MyRequwest::select('id',
             'who_id',
-            'target_id')->where('target_id',$user->id)->get();
-    //    dump($request);
+            'target_id')->where('target_id', $user->id)
+            ->where('rezult', 'not_dispersed')
+            ->get();
+        //    dump($request);
+
+        $myRequwest = MyRequwest::select('id',
+            'who_id',
+            'target_id', 'rezult')->where('who_id', $user->id)
+            ->get();
 
 
-        return view('requwest.myRequwest')->with(['requwest' => $request]);
+        return view('requwest.myRequwest')->with(['requwest' => $request, 'myRequwest' => $myRequwest]);
     }
 
-    public function makeAccess($id){
-        dump($id);
-        $authUser=Auth::user();
+    public function makeAccess($id)
+    {
+
+        $authUser = Auth::user();
         $girl = Girl::select([
             'name',
             'email',
@@ -135,14 +141,66 @@ class PrivateController extends Controller
             'banned',
             'user_id'
         ])->where('id', $id)->first();
-        if ($girl==null){
+        if ($girl == null) {
             return Redirecr('/ankets');
         }
         dump($girl);
         DB::table('user_user')
-            ->insert(['other_id'=>$authUser->id,'my_id'=>$girl->user_id]);
-        return Redirect('/requwestForMe');
+            ->insert(['other_id' => $authUser->id, 'my_id' => $girl->user_id]);
+        //обновляем таблицу запросов
+        DB::table('requwest')
+            ->where(['target_id', $authUser->id])
+            ->update(['rezult' => 'accepted'])->andWhere(['who_id', $id]);
 
-        
+
+//запросу:
+        //not_dispersed
+        //accepted
+        //denided
+        return Redirect('/requwestForMe');
     }
+
+    public function denideAccess($id)
+    {
+        dump($id);
+        $authUser = Auth::user();
+        $girl = Girl::select([
+            'name',
+            'email',
+            'password',
+            'id',
+            'description',
+            'enabled',
+            'payday',
+            'payed',
+            'login',
+            'main_image',
+            'sex',
+            'meet',
+            'weight',
+            'height',
+            'age',
+            'country_id',
+            'region_id',
+            'city_id',
+            'banned',
+            'user_id'
+        ])->where('id', $id)->first();
+        if ($girl == null) {
+            return Redirecr('/ankets');
+        }
+        dump($girl);
+        DB::table('requwest')
+            ->where('target_id', '=', $authUser->id)
+            ->where('who_id', '=', $id)
+            ->update(['rezult' => 'denide']);
+
+
+//запросу:
+        //not_dispersed
+        //accepted
+        //denided
+        return Redirect('/requwestForMe');
+    }
+
 }
