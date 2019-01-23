@@ -106,8 +106,12 @@ class Girl extends Model
         $user = Auth::user();
         //выбирем в запросах, есть ли запрос от авторизованного user для данной анкеты
         $rez = DB::select('select * from requwest where who_id=? and  target_id=?', [$user->id, $user_id]);
-        $rez = $rez[0];
-        return $rez;
+        if ($rez == null) {
+            return null;
+        } else {
+            $rez = $rez[0];
+            return $rez;
+        }
     }
 
     //возвращает, есть ли запросы на добавление на открытие приватной инфомации в анкете
@@ -115,10 +119,11 @@ class Girl extends Model
     {
         $user = Auth::user();
         $rez = DB::select('select * from requwest where  target_id=?', [$user->id]);
-        if ($rez==null){
+        if ($rez == null) {
             return null;
+        } else {
+            $rez = $rez[0];
+            return $rez;
         }
-        $rez = $rez[0];
-        return $rez;
     }
 }

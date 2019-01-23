@@ -355,3 +355,9 @@ Route::get('/continion/', 'AnketController@createGirl')->name('continion');
 //приватный доступ
 //makePrivateRequwest
 Route::get('/privateRequwest/{id}', 'PrivateController@makeRequwest')->name('makePrivateRequwest')->middleware('auth');;
+
+//просмотр отправденныъ запросов
+Route::get('/requwestForMe', 'PrivateController@requwestForMe')->name('requwestForMe')->middleware('auth');;
+
+//предоставить доступ
+Route::get('/makeAccess/{id}', 'PrivateController@makeAccess')->name('makeAccess')->middleware('auth');;

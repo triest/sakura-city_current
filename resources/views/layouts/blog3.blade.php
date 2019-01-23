@@ -662,7 +662,7 @@
                 ?>
 
                 <b>У вас есть запросы на открытие анкеты!</b>
-                    <a class="button blue" href="{{route('main')}}" role="link" onclick=" relocate_home()">Посмотреть запросы</a>
+                    <a class="button blue" href="{{route('requwestForMe')}}" role="link" onclick=" relocate_home()">Посмотреть запросы</a>
                 <? }} ?>
             @endif
 

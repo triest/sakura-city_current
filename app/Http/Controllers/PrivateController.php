@@ -82,14 +82,67 @@ class PrivateController extends Controller
 
         $requwest = new MyRequwest();
         //  $requwest->who()->save($authUser);
-      //  $requwest->who()->save($authUser);
-            $requwest->who_id=$authUser->id;
-            $requwest->target_id=$user->id;
-   //     $requwest->target()->save($user);
+        //  $requwest->who()->save($authUser);
+        $requwest->who_id = $authUser->id;
+        $requwest->target_id = $user->id;
+        //     $requwest->target()->save($user);
         $requwest->save();
         //return redirect('/anket/{id}',$user->id);
         return redirect()->route('showGirl', ['id' => $girl->id]);
 
     }
 
+    //просмотр запросов
+    public function requwestForMe(Request $request)
+    {
+
+        $user = Auth::user();
+        //  $price_toTop = collect(DB::select('select price from servises where name=\'toTop\' '))->first(); //получили цену
+
+        $request = collect(DB::select('select * from requwest where target_id=?', [$user->id]));
+
+        $request=MyRequwest::select( 'id',
+            'who_id',
+            'target_id')->where('target_id',$user->id)->get();
+    //    dump($request);
+
+
+        return view('requwest.myRequwest')->with(['requwest' => $request]);
+    }
+
+    public function makeAccess($id){
+        dump($id);
+        $authUser=Auth::user();
+        $girl = Girl::select([
+            'name',
+            'email',
+            'password',
+            'id',
+            'description',
+            'enabled',
+            'payday',
+            'payed',
+            'login',
+            'main_image',
+            'sex',
+            'meet',
+            'weight',
+            'height',
+            'age',
+            'country_id',
+            'region_id',
+            'city_id',
+            'banned',
+            'user_id'
+        ])->where('id', $id)->first();
+        if ($girl==null){
+            return Redirecr('/ankets');
+        }
+        dump($girl);
+        DB::table('user_user')
+            ->insert(['other_id'=>$authUser->id,'my_id'=>$girl->user_id]);
+        return Redirect('/requwestForMe');
+
+        
+    }
 }

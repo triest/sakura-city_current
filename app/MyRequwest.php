@@ -38,4 +38,12 @@ class MyRequwest extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function getWho(){
+        $id=$this->who_id;
+        $user=User::select(['id','name'])->where('id',$id)->first();
+      //  $girl=$user->girl()->first();
+        $girl = Girl::select(['id', 'name','main_image' ])
+            ->where('user_id',$user->id)->first();
+        return $girl;
+    }
 }
