@@ -194,19 +194,27 @@ class PrivateController extends Controller
     public function whoMakeSeeMyAnket()
     {
         $authUser = Auth::user();
-        $request = collect(DB::select('select * from user_user where other_id=?', [$authUser->id]));
+        $request = collect(DB::select('select * from user_user where my_id=?', [$authUser->id]));
         $girl_array = [];
         foreach ($request as $item) {
             $user = User::select(['id', 'name'])->where('id', $item->other_id)->first();
             $girl = Girl::select(['id', 'name', 'main_image'])->where('user_id', $user->id)->first();
             array_push($girl_array, $girl);
         }
-        dump($girl_array);
         return view('requwest.whoCanSee')->with(['requwest' => $request, 'girls' => $girl_array]);
     }
 
-    public function clouseAccess($idl)
+    public function clouseAccess($id)
     {
+        $authUser = Auth::user();
+        if ($authUser==null){
+            return Redirect('/anket');
+        }
+        $girl = Girl::select([
+            'user_id'
+        ])->where('id', $id)->first();
+     DB::delete('delete from user_user where my_id = ? and other_id = ? limit 1', [$authUser->id, $girl->user_id]);
 
+        return Redirect('whoMakeSeeMyAnket');
     }
 }
