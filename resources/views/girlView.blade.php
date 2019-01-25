@@ -53,6 +53,12 @@
         @if($girl->sex=='male')
             <b> Мужской</b>
         @endif
+
+        @if($girl->private!=null)
+            <label>Приватное сообщение:</label>
+            <br>
+            <p class="card-text>"><b> Телефон: {!!$girl->phone  !!}</b></p>
+        @endif
         <p class="card-text"><b>Рост : {{$girl->height}}</b>
         <p class="card-text"><b>Вес : {{$girl->weight}}</b>
         <p class="card-text"><b>Возраст : {{$girl->age}}</b>
@@ -68,9 +74,9 @@
         @endif
         <p class="card-text"><b> {!!$girl->description  !!}</b></p>
 
-        @if($girl->private!=null):
-        <label>Приватное сообщение</label>
-        <p class="card-text>"><b>{!!$girl->private  !!}<</b></p>
+        @if($girl->private!=null)
+            <label>Приватное сообщение:</label>
+            <p class="card-text>"><b>{!!$girl->private  !!}<</b></p>
         @endif
     </div>
     <br>

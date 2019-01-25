@@ -93,12 +93,12 @@ Route::get('/sendSMS', function () {
 
 Route::get('/sendSMS2', function () {
     $phone = Input::get('phone');
-    // dump($phone);
+
     $user = collect(DB::select('select * from users where phone like ?', [$phone]))->first();
     //   dump($user);
-    if ($user != null) {
-        echo 'Phone alredy exist!';
-        return Response::json($user);
+    if ($user != null and $user->phone_conferd == 1) {
+        //echo 'Phone alredy exist!';
+        return Response::json(['result' => 'alredy']);
     }
 
     $user = Auth::user();
@@ -363,3 +363,8 @@ Route::get('/requwestForMe', 'PrivateController@requwestForMe')->name('requwestF
 Route::get('/makeAccess/{id}', 'PrivateController@makeAccess')->name('makeAccess')->middleware('auth');;
 
 Route::get('/denadeAccess/{id}', 'PrivateController@denideAccess')->name('denideAccess')->middleware('auth');;
+
+
+Route::get('/whoMakeSeeMyAnket', 'PrivateController@whoMakeSeeMyAnket')->name('whoMakeSeeMyAnket')->middleware('auth');;
+
+Route::get('/clouseAccess/{id}', 'PrivateController@clouseAccess')->name('clouseAccess')->middleware('auth');;

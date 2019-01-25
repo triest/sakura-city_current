@@ -3,6 +3,12 @@
 
 @section('content')
 
+    <b><a href="{{route('whoMakeSeeMyAnket')}}">Кто может просматривать закрытую информацию на моей странице
+            странице:</a></b>
+
+
+
+    <br>
     <b>Запросы на открытие доступа к странице:</b>
     <? $count = 1 ?>
     @foreach($requwest as $reg)

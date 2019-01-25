@@ -15,7 +15,7 @@
 
                 <!--   <button id="button2" style="display:none;" hred="http://sakura-city.info/password/reset/" this.style.display = 'none';">Сбросить пароль</button>-->
 
-                <button  h role="link" id="createGirlPage" onclick=" relocate_home()" disabled>Создать анкету</button>
+                <button h role="link" id="createGirlPage" onclick=" relocate_home()" disabled>Создать анкету</button>
             </div>
         </div>
     </div>
@@ -30,8 +30,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
     <script>
-        function relocate_home()
-        {
+        function relocate_home() {
             location.href = "http://sakura-city.info/createAnketPage";
         }
 
@@ -44,12 +43,14 @@
             return true;
         }
 
-
         $('#sendSMS').on('click', function (e) {
             console.log("click")
             var phone = document.getElementById('phone').value;
             console.log(phone)
-            //ajax
+            if (phone.length!=11){
+                alert("Длина телефонного номера 11 цифр!")
+                return;
+            }
             axios.get('/sendSMS2?phone=' + phone)
                 .then(
                     response => {
@@ -84,22 +85,21 @@
                             if (response.data.answer == "ok") {
                                 var formID = document.getElementById("confurnButton")
                                 console.log("ok");
-                                document.getElementById('createGirlPage').disabled =false;
+                                document.getElementById('createGirlPage').disabled = false;
+                            }
+                            else if (response.data.result == "alredy") {
+                                alert("Данный номер уже заригистрирован!")
                             }
                             else {
                                 alert("Ошибка. Неверный код!")
                             }
-
                             //    document.getElementById(button2.style.display = 'block')
-
                         }
                     )
                     .catch(
                         // error=>console.log(error)
                     )
             })
-
-
     </script>
 
 @endsection

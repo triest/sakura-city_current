@@ -97,6 +97,10 @@ class AnketController extends Controller
         if (Auth::guest()) {
             return redirect('/login');
         }
+        if($user->phone_conferd!=1){
+            return redirect('/join/');
+        }
+
         $girl = Girl::select([
             'name',
             'email',

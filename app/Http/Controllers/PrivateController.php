@@ -45,7 +45,6 @@ class PrivateController extends Controller
 
     public function makeRequwest($id)
     {
-        dump($id);
         $authUser = Auth::user();
         if ($authUser == null) {
             return null;
@@ -73,23 +72,13 @@ class PrivateController extends Controller
             'banned',
             'user_id'
         ])->where('id', $id)->first();
-
-        dump($girl);
-
         $user = User::select('id', 'name', 'email')->where('id',
             $girl->user_id)->first();
-        echo "auth user";
-
         $requwest = new MyRequwest();
-        //  $requwest->who()->save($authUser);
-        //  $requwest->who()->save($authUser);
         $requwest->who_id = $authUser->id;
         $requwest->target_id = $user->id;
-        //     $requwest->target()->save($user);
         $requwest->save();
-        //return redirect('/anket/{id}',$user->id);
         return redirect()->route('showGirl', ['id' => $girl->id]);
-
     }
 
     //просмотр запросов
@@ -144,13 +133,14 @@ class PrivateController extends Controller
         if ($girl == null) {
             return Redirecr('/ankets');
         }
-        dump($girl);
         DB::table('user_user')
             ->insert(['other_id' => $authUser->id, 'my_id' => $girl->user_id]);
         //обновляем таблицу запросов
-        DB::table('requwest')
-            ->where(['target_id', $authUser->id])
-            ->update(['rezult' => 'accepted'])->andWhere(['who_id', $id]);
+        /*     DB::table('requwest')
+                 ->where(['target_id', $authUser->id])
+                 ->update(['rezult' => 'accepted'])->andWhere(['who_id', $id]);*/
+        DB::update('update requwest set rezult = \'accepted\' where who_id = ? and	target_id=?',
+            [$girl->user_id, $authUser->id]);
 
 
 //запросу:
@@ -162,7 +152,6 @@ class PrivateController extends Controller
 
     public function denideAccess($id)
     {
-        dump($id);
         $authUser = Auth::user();
         $girl = Girl::select([
             'name',
@@ -189,7 +178,6 @@ class PrivateController extends Controller
         if ($girl == null) {
             return Redirecr('/ankets');
         }
-        dump($girl);
         DB::table('requwest')
             ->where('target_id', '=', $authUser->id)
             ->where('who_id', '=', $id)
@@ -203,4 +191,22 @@ class PrivateController extends Controller
         return Redirect('/requwestForMe');
     }
 
+    public function whoMakeSeeMyAnket()
+    {
+        $authUser = Auth::user();
+        $request = collect(DB::select('select * from user_user where other_id=?', [$authUser->id]));
+        $girl_array = [];
+        foreach ($request as $item) {
+            $user = User::select(['id', 'name'])->where('id', $item->other_id)->first();
+            $girl = Girl::select(['id', 'name', 'main_image'])->where('user_id', $user->id)->first();
+            array_push($girl_array, $girl);
+        }
+        dump($girl_array);
+        return view('requwest.whoCanSee')->with(['requwest' => $request, 'girls' => $girl_array]);
+    }
+
+    public function clouseAccess($idl)
+    {
+
+    }
 }
