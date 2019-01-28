@@ -14,9 +14,10 @@ class CreatePrivatePhotosTable extends Migration
     public function up()
     {
 
-        Schema::create('private_photos1', function (Blueprint $table) {
+        Schema::create('private_photos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('photo_name')->nullable();
+
             $table->timestamps();
         });
     }

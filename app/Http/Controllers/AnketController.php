@@ -225,11 +225,14 @@ class AnketController extends Controller
         }
         $data = $request->all();
         $girl = new Girl();
-        $girl->fill($data);
+        dump($request);
+        $girl->name=$request->name;
+       // $girl->fill($data);
         $girl['main_image'] = $image_new_name . '.' . $image_extension;
         $girl['enabled'] = true;
         $id = Auth::user()->id;
         $girl['user_id'] = $id;
+        dump($id);
         $girl['age'] = $request['age'];
         $girl['sex'] = $request['sex'];
         $girl['meet'] = $request['met'];
@@ -240,8 +243,7 @@ class AnketController extends Controller
         dump($girl);
 
         $girl->save();
-        die();
-        dump($request);
+
 
         if (Input::hasFile('images')) {
             $count = 0;
