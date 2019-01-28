@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCreateAndUpdate extends Migration
+class CreatePrivatePhotosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,12 @@ class AddCreateAndUpdate extends Migration
      */
     public function up()
     {
-        //
+
+        Schema::create('private_photos1', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('photo_name')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ class AddCreateAndUpdate extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('private_photos');
     }
 }

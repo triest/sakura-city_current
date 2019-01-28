@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 //use Illuminate\Validation\Validator;
 use App\Photo;
+use App\Privatephoto;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 //use Illuminate\Contracts\Validation\Validator;
@@ -97,7 +98,7 @@ class AnketController extends Controller
         if (Auth::guest()) {
             return redirect('/login');
         }
-        if($user->phone_conferd!=1){
+        if ($user->phone_conferd != 1) {
             return redirect('/join/');
         }
 
@@ -162,7 +163,7 @@ class AnketController extends Controller
                 'region' => $region,
                 'country' => $country,
                 'phone' => $user,
-                'user'=>$user
+                'user' => $user
             ]
         );
     }
@@ -232,13 +233,16 @@ class AnketController extends Controller
         $girl['age'] = $request['age'];
         $girl['sex'] = $request['sex'];
         $girl['meet'] = $request['met'];
-        $girl['private']=$request['private'];
+        $girl['private'] = $request['private'];
         //встречи
         //местоположение
-        $girl->save();
 
+        dump($girl);
 
         $girl->save();
+        die();
+        dump($request);
+
         if (Input::hasFile('images')) {
             $count = 0;
 
@@ -253,6 +257,23 @@ class AnketController extends Controller
                 $photo['girl_id'] = $id;
                 $photo->save();
             }
+
+
+/*
+
+*/
+        }
+
+        foreach ($request->privateimages as $key) {
+            echo 'image';
+            $image_extension = $request->file('file')->getClientOriginalExtension();
+            $image_new_name = md5(microtime(true));
+            $key->move(public_path() . '/images/upload/', strtolower($image_new_name . '.' . $image_extension));
+            $id = $girl['id'];
+            $photo = new Privatephoto();
+            $photo['photo_name'] = $image_new_name . '.' . $image_extension;
+            $photo['girl_id'] = $id;
+            $photo->save();
         }
 
         if ($request->country == '-') {
@@ -426,6 +447,7 @@ class AnketController extends Controller
         if ($user == null) {
             return redirect('/login');
         }
+
         $girl = Girl::select([
             'name',
             'age',
@@ -445,7 +467,8 @@ class AnketController extends Controller
             'height',
             'country_id',
             'region_id',
-            'city_id'
+            'city_id',
+            'private'
         ])->where('user_id', $user->id)->first();
         if ($girl == null) {
             return $this->index();
@@ -456,21 +479,28 @@ class AnketController extends Controller
         //   $countries = collect(DB::select('select * from countries'));
         //$countries = collect(DB::select('select * from countries'));
         $countries = collect(DB::select('select * from countries'));
+        if ($girl->country_id != null) {
+            $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
+                [$girl->country_id]));
+        }
+        if ($girl->region_id != null) {
+            $region = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_region`=?',
+                [$girl->region_id]));
+            $cityes = collect(DB::select('select * from cities where id_region=?',
+                [$girl->region_id]));
+        }
+        else{
+            $cityes=null;
+            $region=null;
+        }
 
-        $regions = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_country`=?',
-            [$girl->country_id]));
-
-        $region = collect(DB::select('SELECT `id`, `id_region`, `id_country`, `name` FROM `regions` where `id_region`=?',
-            [$girl->region_id]));
-
-        $region = $region[0];
-
-        $cityes = collect(DB::select('select * from cities where id_region=?',
-            [$girl->region_id]));
-
-        $city = collect(DB::select('select * from cities where id_city=?',
-            [$girl->city_id]))->first();
-
+        if ($girl->city_id != null) {
+            $city = collect(DB::select('select * from cities where id_city=?',
+                [$girl->city_id]))->first();
+        }
+        else{
+            $city=null;
+        }
 
         $country = collect(DB::select('select * from countries where id_country=?',
             [$girl->country_id]))->first(); //получаем страны
@@ -495,6 +525,7 @@ class AnketController extends Controller
             'sex' => 'required',
             'age' => 'required|numeric|min:18',
             'met' => 'required',
+            'private'=>'required',
             'description' => 'required',
             'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -513,6 +544,7 @@ class AnketController extends Controller
             'id',
             'phone',
             'description',
+            'private',
             'enabled',
             'payday',
             'payed',
@@ -523,6 +555,9 @@ class AnketController extends Controller
             'weight',
             'height'
         ])->where('user_id', $user->id)->first();
+        $girl->age=$request->age;
+        $girl->description=$request->description;
+        $girl->private=$request->private;
         if ($girl == null) {
             return redirect('/index');
         }

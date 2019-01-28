@@ -344,6 +344,7 @@ class ComposerStaticInit9c18ef795f2bf088856ca0abd97ae9be
         'App\\MyRequwest' => __DIR__ . '/../..' . '/app/MyRequwest.php',
         'App\\Payment' => __DIR__ . '/../..' . '/app/Payment.php',
         'App\\Photo' => __DIR__ . '/../..' . '/app/Photo.php',
+        'App\\Privatephoto' => __DIR__ . '/../..' . '/app/Privatephoto.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/BroadcastServiceProvider.php',

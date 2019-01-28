@@ -106,7 +106,9 @@
         </label>
         <label>Регион:
             <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region">
-                <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
+                @if($region!=null)
+                    <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
+                @endif
                 <option value="-">-</option>
                 @foreach($regions as $region)
                     <option value="{{$region->id_region}}">{{$region->name}}</option>
@@ -116,7 +118,9 @@
 
         <label>Город:
             <select id="city" class="city" style="width: 200px" name="city">
-                <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
+                @if($city!=null)
+                    <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
+                @endif
                 <option value="-">-</option>
                 @if($cityes!=null)
                     @foreach($cityes as $city2)
@@ -178,6 +182,13 @@
             <font color="red"><p class="errors">{{$errors->first('description')}}</p></font>
         @endif
 
+        <div class="form-group">
+            <label for="exampleInputFile">Приватное описание:</label>
+            <textarea name="private" required>{{$girl->private}} </textarea>
+        </div>
+        @if($errors->has('description'))
+            <font color="red"><p class="errors">{{$errors->first('description')}}</p></font>
+        @endif
 
         <input type="hidden" value="{{csrf_token()}}" name="_token">
 

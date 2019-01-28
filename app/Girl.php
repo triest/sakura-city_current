@@ -45,6 +45,11 @@ class Girl extends Model
         return $this->hasMany('App\Photo');
     }
 
+    public function privatephotos()
+    {
+        return $this->hasMany('App\Privatephoto');
+    }
+
     public function user()
     {
         return $this->hasOne('App\User');

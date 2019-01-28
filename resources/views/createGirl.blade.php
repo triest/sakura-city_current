@@ -209,6 +209,11 @@
                multiple>
         <br>
 
+        <label>Выберите приватные фотографии для галереи(можно больше одной). Их смогут вилетьтолько те, кому вы откроете доступ.</label>
+        <input required type="file" class="form-control" name="privateimages[]" accept="image/*" placeholder="Фотографии"
+               multiple>
+        <br>
+
         <button type="submit" class="btn btn-default">Сохранить изменения</button>
     </form>
     <br>

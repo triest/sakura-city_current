@@ -34,6 +34,7 @@ return array(
     'App\\MyRequwest' => $baseDir . '/app/MyRequwest.php',
     'App\\Payment' => $baseDir . '/app/Payment.php',
     'App\\Photo' => $baseDir . '/app/Photo.php',
+    'App\\Privatephoto' => $baseDir . '/app/Privatephoto.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/BroadcastServiceProvider.php',

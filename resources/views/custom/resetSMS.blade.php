@@ -4,7 +4,8 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <label>Введите телефон</label>
+                <label>Введите телефон. Имено этот номер будут видеть остальне пользователи. Менять его нельзя.
+                Номер должен состоять из 11 цифр. Первая цифра код страны. Для России это 7. За тем идут 10 цифр номера телефона. Приме:79001234567</label>
                 <input type="tel" class="form-control" id="phone" name="phone" onkeypress="return isNumber(event)"
                        required></input>
                 <a class="button green" id="sendSMS">Отправить SMS</a><br>
@@ -47,7 +48,7 @@
             console.log("click")
             var phone = document.getElementById('phone').value;
             console.log(phone)
-            if (phone.length!=11){
+            if (phone.length != 11) {
                 alert("Длина телефонного номера 11 цифр!")
                 return;
             }
@@ -57,6 +58,9 @@
                         console.log(response.data);
                         if (response.data.result == "ok") {
                             alert("SMS отправленно")
+                        }
+                        if (response.data.result == "alredy") {
+                            alert("Такой номер уже зарегистрирован!")
                         }
                         else {
                             alert("Ошибка. Проверьте номер!")
