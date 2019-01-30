@@ -205,8 +205,10 @@ Route::get('/bot', 'GirlsController@bot')->name('bot');
 
 //галерея
 Route::get('/galeray', 'AnketController@galarayView')->name('galeray')->middleware('auth');;
-Route::get('/image/delete/{imege}', 'AnketController@deleteimage')->name('deleteImage')->middleware('auth');;
+Route::get('/image/delete/{image}', 'AnketController@deleteimage')->name('deleteImage')->middleware('auth');;
+Route::get('/image/private/delete/{image}', 'AnketController@deletePrivateImage')->name('deletePrivateImage')->middleware('auth');;
 Route::post('/image/upload', 'AnketController@uploadimage')->name('uploadImage')->middleware('auth');;
+Route::post('/image/pravate/upload', 'AnketController@uploadPrivateimage')->name('uploadPrivateImage')->middleware('auth');;
 Route::post('/image/main/upload', 'GirlsController@uploadMainimage')->name('uploadMainImage')->middleware('auth');;
 
 Route::get('/message', 'MessagesController@GetMessagesPage')->middleware('auth');;

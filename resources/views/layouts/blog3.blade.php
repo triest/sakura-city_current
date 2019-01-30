@@ -585,6 +585,11 @@
             border-bottom: solid 3px #589cb6;
             box-shadow: inset 0 0 0 1px #b2e6f8;
         }
+
+        .modal {
+            overflow-x: scroll;
+            overflow-y: scroll;
+        }
     </style>
     <style type="text/css">
         .selected img {

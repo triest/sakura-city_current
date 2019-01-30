@@ -154,7 +154,7 @@ class GirlsController extends Controller
         }
 
         $AythUser = Auth::user();
-
+        $privatephoto = null;
         //проверяем, что просматривающий пользователь зареген.
         if ($AythUser != null) {
             //  $girl_user_id=$girl->user_id;
@@ -186,15 +186,18 @@ class GirlsController extends Controller
                     'city_id',
                     'banned'
                 ])->where('id', $id)->first();
+                $privatephoto = $girl->privatephotos()->get();
             }
         }
+
 
         return view('girlView')->with([
             'girl' => $girl,
             'images' => $images,
             'country' => $country,
             'region' => $region,
-            'city' => $city
+            'city' => $city,
+            'privatephotos' => $privatephoto
         ]);
 
     }

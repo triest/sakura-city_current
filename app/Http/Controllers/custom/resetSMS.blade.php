@@ -90,14 +90,16 @@
                                 var formID = document.getElementById("confurnButton")
                                 console.log("ok");
                                 document.getElementById('createGirlPage').disabled = false;
-                            }
-                            else if (response.data.result == "alredy") {
-                                alert("Данный номер уже заригистрирован!")
+                                alert("Код верный. Нажмите \"Создать анкету\"")
                             }
                             else {
-                                alert("Ошибка. Неверный код!")
+                                if (response.data.result == "alredy") {
+                                    alert("Данный номер уже заригистрирован!")
+                                }
+                                else {
+                                    alert("Ошибка. Неверный код!")
+                                }
                             }
-                            //    document.getElementById(button2.style.display = 'block')
                         }
                     )
                     .catch(

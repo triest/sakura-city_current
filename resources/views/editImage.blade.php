@@ -4,7 +4,7 @@
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 portfolio-item">
         <a class="button blue" href="{{ route('girlsEditAuchAnket') }}">Редактировать анкету</a><br>
         <div class="container gallery-container">
-
+            <b>Галерея:</b>
 
             <div class="row">
                 Загрузить фотографию:
@@ -42,6 +42,33 @@
                             <div class="col-lg-7 col-md-4 col-sm-4 col-xs-4 portfolio-item">
                                 <img  height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>">
                                 <a class="button blue" href="{{route('deleteImage',['id'=>$image->photo_name])}}" role="link">Удалить</a>
+                            </div>
+                        @endforeach
+
+                    </div>
+                </div>
+
+            </div>
+            <b>Приватная галерея:</b>
+            <div class="row">
+                Загрузить приватную фотографию:
+                <form action="{{route('uploadPrivateImage')}}" method="post" enctype="multipart/form-data" novalidate>
+                    {{ csrf_field() }}
+                    <input type="file"  id="file"  name="file" accept="image/x-png,image/gif,image/jpeg" value="{{ old('file')}}" required>
+                    @if($errors->has('file'))
+                        <font color="red"><p>  {{$errors->first('file')}}</p></font>
+                    @endif
+                    <input type="submit" class="btn btn-default"></input>
+                </form>
+            </div>
+            <div class="container gallery-container">
+                <div class="tz-gallery">
+                    <div class="row">
+
+                        @foreach($private as $image)
+                            <div class="col-lg-7 col-md-4 col-sm-4 col-xs-4 portfolio-item">
+                                <img  height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>">
+                                <a class="button blue" href="{{route('deletePrivateImage',['id'=>$image->photo_name])}}" role="link">Удалить</a>
                             </div>
                         @endforeach
 

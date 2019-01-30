@@ -96,6 +96,26 @@
 
         </div>
     </div>
+    @if(count($privatephotos) > 0)
+        <br>
+        <b>Приватные фотографии:</b>
+        <div class="container gallery-container">
+            <div class="tz-gallery">
+
+                <div class="row">
+                    @foreach($privatephotos as $image)
+                        <div class="col-sm-6 col-md-4">
+                            <a class="lightbox" href="<?php echo asset("public/images/upload/$image->photo_name")?>">
+                                <img height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>"
+                                     alt="Park">
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+
+            </div>
+        </div>
+    @endif
     <br>
 
     <a class="button blue" href="{{route('main')}}" role="link" onclick=" relocate_home()">К списку анкет</a>
