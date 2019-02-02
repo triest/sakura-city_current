@@ -98,4 +98,13 @@ class User extends Authenticatable
         return $this->hasMany('App\MyRequwest');
     }
 
+    /**
+     * A user can have many messages
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function messages()
+    {
+        return $this->hasMany('App\Message');
+    }
 }

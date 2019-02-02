@@ -123,7 +123,7 @@ class Girl extends Model
     function hasRequwest()
     {
         $user = Auth::user();
-        $rez = DB::select('select * from requwest where  target_id=? and rezult=\'not_dispersed\'' , [$user->id]);
+        $rez = DB::select('select * from requwest where  target_id=? and rezult=\'not_dispersed\'', [$user->id]);
         if ($rez == null) {
             return null;
         } else {

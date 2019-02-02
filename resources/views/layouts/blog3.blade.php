@@ -623,6 +623,7 @@
     </style>
 
 
+    
     <!--Yandex -->
     <meta name="yandex-verification" content="af4168af7d682a89"/>
 </head>
@@ -801,6 +802,7 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
+<script src="/js/app.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://bootstrap-3.ru/dist/js/bootstrap.min.js"></script>
 <script src="http://bootstrap-3.ru/examples/offcanvas/offcanvas.js"></script>

@@ -238,9 +238,12 @@ class AnketController extends Controller
         $girl['sex'] = $request['sex'];
         $girl['meet'] = $request['met'];
         $girl['private'] = $request['private'];
+        $girl['description']=$request['description'];
         //встречи
         //местоположение
 
+       // dump($request);
+      //  die();
         $girl->save();
 
 

@@ -10,7 +10,8 @@
                 Загрузить фотографию:
                 <form action="{{route('uploadImage')}}" method="post" enctype="multipart/form-data" novalidate>
                     {{ csrf_field() }}
-                    <input type="file"  id="file"  name="file" accept="image/x-png,image/gif,image/jpeg" value="{{ old('file')}}" required>
+                    <input type="file" id="file" name="file" accept="image/x-png,image/gif,image/jpeg"
+                           value="{{ old('file')}}" required>
                     @if($errors->has('file'))
                         <font color="red"><p>  {{$errors->first('file')}}</p></font>
                     @endif
@@ -20,15 +21,15 @@
             <!--скрипт для отключения кнопки загрузки -->
             <script type="text/javascript">
                 $(document).ready(
-                    function(){
-                        $('input:submit').attr('disabled',true);
+                    function () {
+                        $('input:submit').attr('disabled', true);
                         $('input:file').change(
-                            function(){
-                                if ($(this).val()){
+                            function () {
+                                if ($(this).val()) {
                                     $('input:submit').removeAttr('disabled');
                                 }
                                 else {
-                                    $('input:submit').attr('disabled',true);
+                                    $('input:submit').attr('disabled', true);
                                 }
                             });
                     });
@@ -40,8 +41,9 @@
 
                         @foreach($images as $image)
                             <div class="col-lg-7 col-md-4 col-sm-4 col-xs-4 portfolio-item">
-                                <img  height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>">
-                                <a class="button blue" href="{{route('deleteImage',['id'=>$image->photo_name])}}" role="link">Удалить</a>
+                                <img height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>">
+                                <a class="button blue" href="{{route('deleteImage',['id'=>$image->photo_name])}}"
+                                   role="link">Удалить</a>
                             </div>
                         @endforeach
 
@@ -54,7 +56,8 @@
                 Загрузить приватную фотографию:
                 <form action="{{route('uploadPrivateImage')}}" method="post" enctype="multipart/form-data" novalidate>
                     {{ csrf_field() }}
-                    <input type="file"  id="file"  name="file" accept="image/x-png,image/gif,image/jpeg" value="{{ old('file')}}" required>
+                    <input type="file" id="file" name="file" accept="image/x-png,image/gif,image/jpeg"
+                           value="{{ old('file')}}" required>
                     @if($errors->has('file'))
                         <font color="red"><p>  {{$errors->first('file')}}</p></font>
                     @endif
@@ -67,8 +70,9 @@
 
                         @foreach($private as $image)
                             <div class="col-lg-7 col-md-4 col-sm-4 col-xs-4 portfolio-item">
-                                <img  height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>">
-                                <a class="button blue" href="{{route('deletePrivateImage',['id'=>$image->photo_name])}}" role="link">Удалить</a>
+                                <img height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>">
+                                <a class="button blue" href="{{route('deletePrivateImage',['id'=>$image->photo_name])}}"
+                                   role="link">Удалить</a>
                             </div>
                         @endforeach
 

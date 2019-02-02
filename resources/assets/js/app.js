@@ -17,6 +17,19 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+Vue.component('chat-messages', require('./components/ChatMessages.vue'));
+Vue.component('chat-form', require('./components/ChatForm.vue'));
+
+Vue.component('example', require('./components/Example.vue'));
+
 const app = new Vue({
     el: '#app'
 });
+
+Echo.private('chat')
+    .listen('MessageSent', (e) => {
+        this.messages.push({
+            message: e.message.message,
+            user: e.user
+        });
+    });
