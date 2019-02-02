@@ -380,5 +380,9 @@ Route::get('/rules', function () {
 
 Route::get('/chat', 'ChatController@index');
 
+Route::get('/getAllMyMessages', 'ChatController@getAllMyMessages');
+Route::get('/getUserMessages/{id}', 'ChatController@getMyMessages');
+
+
 Route::get('messagesChat', 'ChatController@fetchMessages');
 Route::post('messagesChat', 'ChatController@sendMessage');

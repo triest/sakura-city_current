@@ -623,13 +623,14 @@
     </style>
 
 
-    
+
     <!--Yandex -->
     <meta name="yandex-verification" content="af4168af7d682a89"/>
 </head>
 
 <body>
 @include('layouts.header2');
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <div class="container">
 
@@ -803,6 +804,8 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="/js/app.js"></script>
+<script src="/js/profile.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://bootstrap-3.ru/dist/js/bootstrap.min.js"></script>
 <script src="http://bootstrap-3.ru/examples/offcanvas/offcanvas.js"></script>
