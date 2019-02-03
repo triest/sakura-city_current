@@ -88,23 +88,30 @@ class ChatController extends Controller
     {
         /*$messages = DB::table('messages3')->where('user_from', '=', Auth::user()->id)->orWhere('user_to', '=',
             Auth::user()->id)->orderBy('created_at')->get();*/
-        $messages = DB::select('select ms.id,gl.name, gl.main_image,ms.user_from,ms.user_to,ms.msg,ms.created_at 
-                from messages3 ms left join girls gl on ms.user_from=gl.user_id
-        WHERE ms.user_from=? or ms.user_to=? 
-         ', [Auth::user()->id, Auth::user()->id]
-        );
-        return $messages;
+
+//        $messages=DB::select('select gl.id, gl.main_image from girls gl right join messages3 ms on ms.from_id=gl.id');
+        $dialogs = DB::select('select * from conversation con left join girls gl on gl.user_id=? where user_one=?',
+            [Auth::user()->id, Auth::user()->id]);
+        $dialogs = DB::select('select * from conversation con left join girls gl on gl.user_id=con.user_two where con.user_one=?',
+            [Auth::user()->id]);
+       //   dump($dialogs); //в dialogs -user two- другой пользователь
+
+
+        return $dialogs;
     }
 
     public static function getMyMessages($id)
     {
-        /*   $messages = DB::table('messages3')->where('user_from', '=', Auth::user()->id)->orWhere('user_to', '=',
-               $id)->orderBy('created_at')->get();*/
-        $messages = DB::select('select ms.id,gl.name, gl.main_image,ms.user_from,ms.user_to,ms.msg,ms.created_at 
-                from messages3 ms left join girls gl on ms.user_from=gl.user_id
-        WHERE (ms.user_from=? and  ms.user_to=?) or (ms.user_from=? and  ms.user_to=?)  
-         ', [Auth::user()->id, $id, $id, Auth::user()->id]
-        );
+        $girl=Girl::select('id','user_id')->where('id',$id)->first();
+
+        $messages = DB::table('messages3')->where('user_from', '=', Auth::user()->id)->orWhere('user_to', '=',
+            $id)->orderBy('created_at')->get();
+          $messages = DB::select('select ms.id,gl.name, gl.main_image,ms.user_from,ms.user_to,ms.msg,ms.created_at
+                  from messages3 ms left join girls gl on ms.user_from=gl.user_id
+          WHERE (ms.user_from=? and  ms.user_to=?) or (ms.user_from=? and  ms.user_to=?)
+           ', [Auth::user()->id, $girl->user_id, $girl->user_id, Auth::user()->id]
+          );
+       //       dump($messages);
 
 
         return $messages;
@@ -122,5 +129,44 @@ class ChatController extends Controller
         return $anket;
     }
 
+    public function sendMyMessages(Request $request)
+    {
+        dump($request);
+        $autch = Auth::user();
+        $sendMB = DB::table('messages3')->insert([
+            'user_from' => $autch->id,
+            'user_to' => $request->to,
+            'msg' => $request->msg,
+            'status' => 1
+        ]);
+
+
+        //в отдельную таблицу записываем диалоги
+
+
+        $check = DB::select('select * from conversation where user_one=? and user_two=?', [$autch->id, $request->to]);
+
+        if ($check == null) {
+            $sendMB = DB::table('conversation')->insert([
+                'user_one' => $autch->id,
+                'user_two' => $request->to,
+            ]);
+        }
+        $check = null;
+
+        $check = DB::select('select * from conversation where user_one=? and user_two=?', [$request->to, $autch->id]);
+
+        if ($check == null) {
+            $sendMB = DB::table('conversation')->insert([
+                'user_one' => $request->to,
+                'user_two' => $autch->id,
+            ]);
+        }
+        if ($sendMB) {
+            return ['status' => 'Message Sent!'];
+        } else {
+            return ['status' => 'Fail!'];
+        }
+    }
 
 }

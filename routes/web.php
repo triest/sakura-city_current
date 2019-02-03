@@ -378,10 +378,13 @@ Route::get('/rules', function () {
     return view("rules");
 });
 
+//тут чат
 Route::get('/chat', 'ChatController@index');
-
 Route::get('/getAllMyMessages', 'ChatController@getAllMyMessages');
 Route::get('/getUserMessages/{id}', 'ChatController@getMyMessages');
+//отправка сообщения
+Route::post('/sendChatMessage','ChatController@sendMyMessages');
+
 
 
 Route::get('messagesChat', 'ChatController@fetchMessages');
