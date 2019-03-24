@@ -310,7 +310,7 @@
 
         </div>
 
-        <img height="350" src="<?php echo asset("/images/sakura.jpg")?>">
+        <img height="350" src="<?php echo asset("public/images/sakura.jpg")?>">
         <div class="links">
             <br>
             <div class="links">

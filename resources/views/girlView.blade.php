@@ -20,7 +20,7 @@
 
 
     <br>
-    <img height="250" width="250" src="<?php echo asset("/images/upload/$girl->main_image")?>">
+    <img height="250" width="250" src="<?php echo asset("public/images/upload/$girl->main_image")?>">
 
     <h4 class="card-title">
         {{$girl->name}}
@@ -66,8 +66,8 @@
             <div class="row">
                 @foreach($images as $image)
                     <div class="col-sm-6 col-md-4">
-                        <a class="lightbox" href="<?php echo asset("/images/upload/$image->photo_name")?>">
-                            <img height="250" src="<?php echo asset("/images/upload/$image->photo_name")?>">
+                        <a class="lightbox" href="<?php echo asset("public/images/upload/$image->photo_name")?>">
+                            <img height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>">
                         </a>
                     </div>
                 @endforeach
@@ -86,8 +86,8 @@
                     <div class="row">
                         @foreach($privatephotos as $image)
                             <div class="col-sm-6 col-md-4">
-                                <a class="lightbox" href="<?php echo asset("/images/upload/$image->photo_name")?>">
-                                    <img height="250" src="<?php echo asset("/images/upload/$image->photo_name")?>">
+                                <a class="lightbox" href="<?php echo asset("public/images/upload/$image->photo_name")?>">
+                                    <img height="250" src="<?php echo asset("public/images/upload/$image->photo_name")?>">
                                 </a>
                             </div>
                         @endforeach

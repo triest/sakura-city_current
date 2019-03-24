@@ -10,7 +10,7 @@
 6 silly lifecycle @~prewatch: no script for prewatch, continuing
 7 info lifecycle @~watch: @
 8 verbose lifecycle @~watch: unsafe-perm in lifecycle true
-9 verbose lifecycle @~watch: PATH: /opt/rh/rh-nodejs6/root/usr/lib/node_modules/npm/bin/node-gyp-bin:/home/a0188141/domains/sakura-city.info/public_html/node_modules/.bin:/opt/rh/rh-nodejs6/root/usr/bin:/opt/rh/rh-nodejs8/root/usr/bin:/opt/rh/python27/root/usr/bin:/opt/rh/rh-python36/root/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/home/a0188141/.local/bin:/home/a0188141/bin
+9 verbose lifecycle @~watch: PATH: /opt/rh/rh-nodejs6/root/usr/lib/node_modules/npm/bin/node-gyp-bin:/home/a0188141/domains/sakura-city.info/public_html/node_modules/.bin:/opt/rh/rh-nodejs6/root/usr/bin:/opt/rh/rh-nodejs8/root/usr/bin:/opt/rh/python27/root/usr/bin:/opt/rh/rh-python36/root/usr/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/a0188141/.local/bin:/home/a0188141/bin
 10 verbose lifecycle @~watch: CWD: /home/a0188141/domains/sakura-city.info/public_html
 11 silly lifecycle @~watch: Args: [ '-c', 'npm run development -- --watch' ]
 12 silly lifecycle @~watch: Returned: code: 1  signal: null
