@@ -29,8 +29,6 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
      * @param  \Exception  $exception
      * @return void
      */
@@ -46,33 +44,8 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-
-    public function render($request, Exception $e)
-    {
-        if($this->isHttpException($e))
-        {
-            switch (intval($e->getStatusCode())) {
-                // not found
-                case 404:
-                    return redirect()->route('main');
-                    break;
-                // internal error
-
-
-                default:
-                    return $this->renderHttpException($e);
-                    break;
-            }
-        }
-        else
-        {
-            return parent::render($request, $e);
-        }
-    }
-    /*
     public function render($request, Exception $exception)
     {
         return parent::render($request, $exception);
     }
-    */
 }

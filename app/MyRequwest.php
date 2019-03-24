@@ -2,15 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-//use Doctrine\Common\Cache\Cache;
-use Illuminate\Support\Facades\Cache;
-use Closure;
-use App\Girl;
-use Illuminate\Support\Str;
+
 use Illuminate\Database\Eloquent\Model;
-use App\Message;
+
 
 
 class MyRequwest extends Model
@@ -30,20 +24,17 @@ class MyRequwest extends Model
 
     public function who()
     {
-        return $this->belongsTo('App\User');
+        return $this->hasMany('App\User');
     }
 
     public function target()
     {
-        return $this->belongsTo('App\User');
+        return $this->hasMany('App\User');
     }
 
-    public function getWho(){
-        $id=$this->who_id;
-        $user=User::select(['id','name'])->where('id',$id)->first();
-      //  $girl=$user->girl()->first();
-        $girl = Girl::select(['id', 'name','main_image' ])
-            ->where('user_id',$user->id)->first();
-        return $girl;
+    public function fromContact()
+    {
+        return $this->hasOne(User::class, 'id', 'who_id');
     }
+
 }

@@ -3,13 +3,9 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-//use Doctrine\Common\Cache\Cache;
-use Illuminate\Support\Facades\Cache;
-use Closure;
 use Illuminate\Support\Facades\Auth;
-use App\Girl;
-use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -21,23 +17,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
-        'token',
-        'is_conferd',
-        'active',
         'money',
-        'isAdmin',
-        'email_token',
-        'phone',
-        'phone_conferd',
-        'actice_code',
-        'akcept',
-        'smsResetCode',
-        'password',
-        'you',
-        'kogo'
+        'endvip',
+        'beginvip',
     ];
 
     /**
@@ -50,61 +36,25 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function girl()
-    {
-        return $this->hasOne('App\Girl');
-    }
-
-
     //проверка есть ли анкета
     public function anketisExsis()
     {
-        $rez = Cache::has('anket-is-exsist-' . $this->id); //получаем id анкеты
-        // dump($rez);
+
         $user_id = Auth::user()->id;
         //  dump($user_id);
         $girl = Girl::select(['id', 'name', 'main_image', 'banned'])->where('user_id', $user_id)->first();
-        // dump($girl);
+
         return $girl;
     }
 
-
-    public function anketisExsisUser($id)
+    public function get_id()
     {
-
-        $user_id = $id;
-        //  dump($user_id);
-        $girl = Girl::select(['id', 'name', 'main_image', 'banned'])->where('user_id', $user_id)->first();
-        // dump($girl);
-        return $girl;
-
+        return $this->id;
     }
 
-
-    //создаем токен
-    public function createMailConfermationToke()
+    public function finfUserById($id)
     {
-        $token = Str::random(16);
-        //    echo $token;
-    }
 
-    public function target()
-    {
-        return $this->hasMany('App\MyRequwest');
-    }
-
-    public function who()
-    {
-        return $this->hasMany('App\MyRequwest');
-    }
-
-    /**
-     * A user can have many messages
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function messages()
-    {
-        return $this->hasMany('App\Message');
+        dump($id);
     }
 }

@@ -1,27 +1,21 @@
-@extends('layouts.blog3', ['title' => 'Редактирование анкеты'])
-
+@extends('layouts.blog', ['title' => 'Создание анкеты'])
 @section('content')
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <a class="button blue" href="{{route('galeray')}}" role="link">Редактировать галерею</a>
+    <style>
+        textarea {
+            resize: none;
+        }
+    </style>
+
     <form action="{{route('girlsEdit')}}" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
-        <img height="250" src="<?php echo asset("public/images/upload/$girl->main_image")?>"></img></a>
         <br>
-        Обновить фотографию:
-
-        {{ csrf_field() }}
-        <input type="file" id="file" name="file" accept="image/x-png,image/gif,image/jpeg" value="{{ old('file')}}"
-        >
-        @if($errors->has('file'))
-            <font color="red"><p>  {{$errors->first('file')}}</p></font>
-        @endif
-        <button type="submit" class="btn btn-default">Обновить</button>
         <div class="form-group">
             <label for="title">Имя:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="{{$girl->name}}"
+            <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="{{$username}}"
                    readonly required>
         </div>
+
         @if($errors->has('name'))
             <font color="red"><p>  {{$errors->first('name')}}</p></font>
         @endif
@@ -31,163 +25,69 @@
             <div class="form-group">
                 <label for="phone">Ваш телефон:</label>
                 <!--   <input type="tel" class="form-control" id="phone" name="phone" pattern="^\(\d{3}\)\d{3}-\d{2}-\d{2}$" required></input>-->
-                <input type="tel" class="form-control" id="phone" name="phone" value="{{$phone}}" readonly
-                       required></input>
+
             </div>
         </div>
         <b> Пол:</b> <br>
-        @if($girl->sex=="famele")
-            <input type="radio" id="contactChoice1"
-                   name="sex" value="famele" checked>
-            <label for="contactChoice1">Женский</label>
+        <input type="radio" id="contactChoice1"
+               name="sex" value="famele" checked>
+        <label for="contactChoice1">Женский</label>
 
-            <input type="radio" id="contactChoice2"
-                   name="sex" value="male">
-            <label for="contactChoice2">Мужской</label>
-        @else
-            <input type="radio" id="contactChoice1"
-                   name="sex" value="famele">
-            <label for="contactChoice1">Женский</label>
-
-            <input type="radio" id="contactChoice2"
-                   name="sex" value="male" checked>
-            <label for="contactChoice2">Мужской</label>
-        @endif
+        <input type="radio" id="contactChoice2"
+               name="sex" value="male">
+        <label for="contactChoice2">Мужской</label>
 
         <br>
         <label for="age">Возраст:
-            <input type="number" name="age" min="18" value="{{$girl->age}}" onkeypress="return isNumber(event)" checked>
+            <input type="number" name="age" min="18" value="18" onkeypress="return isNumber(event)" checked>
         </label><br>
         @if($errors->has('age'))
             <font color="red"><p>  {{$errors->first('age')}}</p></font>
         @endif
 
         <label for="age">Рост:
-            <input type="number" name="height" min="100" value="{{$girl->height}}" onkeypress="return isNumber(event)">
+            <input type="number" name="height" min="100" value="160" onkeypress="return isNumber(event)">
         </label><br>
         <label for="age">Вес:
-            <input type="number" name="weight" min="45" step="1" value="{{$girl->weight}}"
+            <input type="number" name="weight" min="45" step="1" value="50"
                    pattern="[^@]+@[^@]+\.[0-9]{2,3}" onkeypress="return isNumber(event)">
         </label><br>
 
 
         <b> С кем хотите познакомиться:</b> <br>
-        @if($girl->meet=="famele")
-
-            <input type="radio" id="contactmet"
-                   name="met" value="famele" checked>
-            <label for="contactChoice1">c женщиной</label>
-            <br>
-            <input type="radio" id="contactmet2"
-                   name="met" value="male">
-            <label for="contactChoice2">с мужчиной</label>
-        @else
-            <input type="radio" id="contactmet"
-                   name="met" value="famele">
-            <label for="contactChoice1">c женщиной</label>
-            <br>
-            <input type="radio" id="contactmet2"
-                   name="met" value="male" checked>
-            <label for="contactChoice2">с мужчиной</label>
-        @endif
+        <input type="radio" id="contactmet"
+               name="met" value="famele">
+        <label for="contactChoice1">c женщиной</label>
         <br>
-
-
-        <!--что-бы лишний раз не меняли -->
-        <label>Страна:
-            <select style="width: 200px" class="country" class="form-control input-sm" name="country" id="country">
-                <option value="{{$country->id_country}}" selected>{{$country->name}}</option>
-                <option value="-">-</option>
-                @foreach($countries as $contry)
-                    <option value="{{$contry->id_country}}">{{$contry->name}}</option>
-                @endforeach
-
-            </select>
-        </label>
-        <label>Регион:
-            <select style="width: 200px" class="region" name="region" class="form-control input-sm" id="region">
-                @if($region!=null)
-                    <option value="{{$region->id_region}}" selected>{{$region->name}}</option>
-                @endif
-                <option value="-">-</option>
-                @foreach($regions as $region)
-                    <option value="{{$region->id_region}}">{{$region->name}}</option>
-                @endforeach
-            </select>
-        </label>
-
-        <label>Город:
-            <select id="city" class="city" style="width: 200px" name="city">
-                @if($city!=null)
-                    <option value="{{$city->id_city}}" selected>{{$city->name}}</option>
-                @endif
-                <option value="-">-</option>
-                @if($cityes!=null)
-                    @foreach($cityes as $city2)
-                        <option value="{{$city2->id_city}}">{{$city2->name}}</option>
-                    @endforeach
-                @endif
-            </select>
-        </label>
-        <script>
-            $('#country').on('change', function (e) {
-
-                var country_id = e.target.value;
-                console.log(country_id);
-                //ajax
-                //   $('#city').empty();
-                $('#region').empty();
-                $('#city').empty();
-                $('#region').append('<option value="-">-</option>');
-                $('#city').append('<option value="-">-</option>');
-
-                $.get('/findRegions?country_id=' + country_id, function (data) {
-
-                    $.each(data, function (index, subcatObj) {
-                        //  console.log(subcatObj.name)
-                        $('#region').append('<option value="' + subcatObj.id_region + '">' + subcatObj.name + '</option>');
-                    })
-                })
-                var region_id = e.target.value;
-                console.log(region_id);
-
-            })
-
-            $('#region').on('change', function (e) {
-                var region_id = e.target.value;
-                console.log(region_id)
-                $('#city').empty();
-                $('#city').append('<option value="-">-</option>');
-                // console.log(region_id)
-                $.get('/findCitys?region_id=' + region_id, function (data) {
-                    $('#city').empty();
-                    $.each(data, function (index, subcatObj) {
-                        console.log(subcatObj)
-                        $('#city').append('<option value="' + subcatObj.id_city + '">' + subcatObj.name + '</option>');
-                    })
-                })
-
-            })
-
-
-        </script>
-
-
+        <input type="radio" id="contactmet2"
+               name="met" value="male" checked>
+        <label for="contactChoice2">с мужчиной</label>
+        <br>
+        Цель знакомства:
+        @foreach($allTarget as $tag)
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="tags[]" value="{{$tag}}"
+                       @if(in_array($tag,$anketTarget)) checked="1" @endif >
+                <label class="form-check-label" for="exampleCheck1">{{$tag}}</label>
+            </div>
+        @endforeach
+        <br>
         <br>
         <div class="form-group">
-            <label for="exampleInputFile">Текст анкеты:</label>
-            <textarea name="description" required>{{$girl->description}} </textarea>
+            <label for="exampleInputFile">Текст анкеты:</label><br>
+            <textarea class="form-control" rows="10" name="description" required>{{$girl->description}} </textarea>
         </div>
         @if($errors->has('description'))
             <font color="red"><p class="errors">{{$errors->first('description')}}</p></font>
         @endif
 
         <div class="form-group">
-            <label for="exampleInputFile">Приватное описание:</label>
-            <textarea name="private" required>{{$girl->private}} </textarea>
+            <label for="exampleInputFile">Приватный текст, который видно только тем, кому вы откроете доступ:</label>
+            <br>
+            <textarea class="form-control" rows="10" name="private" required>{{$girl->private}} </textarea>
         </div>
-        @if($errors->has('description'))
-            <font color="red"><p class="errors">{{$errors->first('description')}}</p></font>
+        @if($errors->has('private'))
+            <font color="red"><p class="errors">{{$errors->first('private')}}</p></font>
         @endif
 
         <input type="hidden" value="{{csrf_token()}}" name="_token">
@@ -208,14 +108,7 @@
             });
         </script>
 
-        <script type="text/javascript" src="{{ asset('public/js/tinymce/tinymce.min.js') }}"></script>
-        <script type="text/javascript">
-            tinymce.init({
-                selector: "textarea",
-                plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table contextmenu paste"],
-                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-            });
-        </script>
+
         <br>
         <script type="text/javascript">
             function isNumber(evt) {
@@ -232,32 +125,7 @@
                 return false;
             }
         </script>
-        <button type="submit" class="btn btn-default">Сохранить изменения</button>
+
+        <button type="submit" class="btn btn-default">Сохранить изминения</button>
     </form>
-    <br>
-
-
-    <hr>
-    <a class="button blue" href="{{route('main')}}" role="link">К списку анкет</a>
-
-    <script>
-        //Код jQuery, установливающий маску для ввода телефона элементу input
-        //1. После загрузки страницы,  когда все элементы будут доступны выполнить...
-        $(function () {
-            //2. Получить элемент, к которому необходимо добавить маску
-            $("#phone").mask("8(999) 999-9999");
-        });
-    </script>
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
 @endsection

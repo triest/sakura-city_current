@@ -104,7 +104,6 @@
 
         .
         .m-b-md {
-
             margin-bottom: 30px;
         }
 
@@ -118,7 +117,6 @@
 * Inspiration was taken from:
 * - http://www.premiumpixels.com/freebies/chunky-3d-webbuttons-psd/
 */
-
         /**
          * Shadow
          */
@@ -292,7 +290,7 @@
             box-shadow: inset 0 10px 15px 0 #79b9d2;
         }
     </style>
-    <meta name="yandex-verification" content="af4168af7d682a89" />
+    <meta name="yandex-verification" content="af4168af7d682a89"/>
 </head>
 <body>
 <div class="flex-center position-ref full-height">
@@ -311,14 +309,16 @@
         <div class="title m-b-md">
 
         </div>
-        <!--   <a href="https://placeholder.com"><img src="http://via.placeholder.com/350x150"></a> -->
-        <img height="350" src="<?php echo asset("public/images/sakura.jpg")?>"></a>
+
+        <img height="350" src="<?php echo asset("/images/sakura.jpg")?>">
         <div class="links">
             <br>
-            <a class="button green" href="{{route('main')}}" value="Смотреть анкеты" role="link">Смотреть анкеты</a>
-            <a class="button blue" href="{{route('createGirlPage')}}" value="Смотреть анкеты" role="link">Разместить
-                анкету</a>
-
+            <div class="links">
+                <br>
+                <a class="button green" href="{{route('main')}}" value="Смотреть анкеты" role="link">Смотреть анкеты</a>
+                <a class="button blue" href="{{route('createGirlPage')}}" value="Смотреть анкеты" role="link">Разместить
+                    анкету</a>
+            </div>
 
         </div>
     </div>

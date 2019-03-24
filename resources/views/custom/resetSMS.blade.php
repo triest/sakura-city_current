@@ -1,4 +1,4 @@
-@extends('layouts.blog3', ['title' => 'Подтверждение SMS'])
+@extends('layouts.blog', ['title' => 'Подтверждение SMS'])
 
 @section('content')
     <div class="row">
@@ -35,7 +35,6 @@
         function relocate_home() {
             location.href = "http://sakura-city.info/createAnketPage";
         }
-
         function isNumber(evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -44,7 +43,6 @@
             }
             return true;
         }
-
         $('#sendSMS').on('click', function (e) {
             console.log("click")
             var phone = document.getElementById('phone').value;

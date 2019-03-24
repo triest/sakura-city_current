@@ -11,381 +11,213 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use App\Region;
-use App\City;
-use App\Girl;
-use App\User;
 
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/welcome-test', function () {
-    return view('welcome-test');
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+
+Auth::routes();
+
+Route::get('/messages', 'HomeController@index')->name('home');
+
+Route::get('/messages2', 'HomeController@index2')->name('home2');
+
+
+Route::get('/contacts', 'ContactsController@get');
+Route::get('/contacts2', 'ContactsController@get2');
+Route::get('/conversation/{id}', 'ContactsController@getMessagesFor');
+Route::post('/conversation/send', 'ContactsController@send');
+
+Route::get('/join/', 'CustomUserController@index')->name('join');
+
+Route::get('/', function () {
+    return view('welcome');
 });
 
 Route::get('/anket', 'GirlsController@index')->name('main');
+Route::get('/createAnketPage', 'AnketController@createGirl')->name('createGirlPage')->middleware('auth');
+
+//создание анкеты
+Route::get('/createAnketPage', 'AnketController@createGirl')->name('createGirlPage')->middleware('auth');;
+
+Route::post('/anket/create', 'AnketController@Store')->name('storeGirl');
 Route::get('/anket/{id}', 'GirlsController@showGirl')->name('showGirl');
 
+//количество непрочитанных сообщений
+Route::get('/getCountUnreaded', 'ContactsController@getCountUnreadedMessages')->middleware('auth');
 
-//пользователь соглашение
-Route::get('/Terms', 'GirlsController@showTerms')->name('showTerms')->middleware('auth');;
-Route::get('/createAnketPage', 'AnketController@createGirl')->name('createGirlPage')->middleware('auth');;
-Route::post('/anket/create', 'AnketController@Store')->name('girlsCreate');
+//оличество непрочитанных запросов
+Route::get('/getCountUnreadedRequwest', 'ContactsController@getCountUnreadedRequwest')->middleware('auth');
 
 
-Route::post('/yandex', 'GirlsController@reciverYandex')->name('yandexPost');
+//заявки на открытия
+Route::get('/applications', 'ContactsController@getApplicationPage')->middleware('auth');
+//получаем сами заявки
+Route::get('/getapplication', 'ContactsController@getApplication')->middleware('auth');
 
-//форма таетирования
-Route::get('/testpost', function () {
-    return view('testPost');
-});
+Route::get('/getmyapplication', 'ContactsController@myApplication')->middleware('auth');
+//кто имеет доступ к моеё анкете
+Route::get('/whohaveaccesstomyanket', 'ContactsController@whoHavaAccessToMyAnket')->middleware('auth');
+//закрыть доступ
+Route::get('/clouseaccess', 'ContactsController@clouseaccess')->middleware('auth');
 
+//отклонить доступ
+Route::get('/denideaccess', 'ContactsController@denideAccess')->middleware('auth');
 
-//аутентииакация
-Route::get('auth/login', 'Auth\AuthController@getLogin')->name('autorization');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('/geteaccess', 'ContactsController@makeAccess')->middleware('auth');
 
+Route::get('/req', 'ContactsController@reqTest')->middleware('auth');
 
-Route::get('auth/logout', 'Auth\AuthController@logout')->name('logout')->middleware('auth');;
-Route::get('/user/anketa', 'AnketController@girlsShowAuchAnket')->name('girlsShowAuchAnket');
+//проверяем, есть ли доступ к приватной части или нет
+Route::get('/getisprivaterrnot', 'ContactsController@getIsPrivateOrNot')->middleware('auth');
 
-// Маршруты регистрации...
-Route::get('auth/register', 'Auth\RegisterController@getRegister')->name('registration');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
-Auth::routes();
+//проверяем, отправляли ли запрос
+Route::get('/getsendregornot', 'ContactsController@sendornot')->middleware('auth');
 
-//Восстановление пароля по SMS, страница
-Route::get('password/resetsms', function () {
-    return view('resetSMS');
-})->name('resetsms');
-//Отправить сис
-//
+//отправляем запрос:
+Route::get('/sendreg', 'ContactsController@sendreg')->middleware('auth');
 
-Route::get('/sendSMS', function () {
-    $phone = Input::get('phone');
-    // dump($phone);
-    $user = collect(DB::select('select * from users where phone like ?', [$phone]))->first();
-    //   dump($user);
-    if ($user == null) {
-        echo 'user not found';
-        return Response::json($user);
-    }
+//редактирование галлереи
+Route::get('/editimages', function () {
+    return view('editimages');
+})->middleware('auth');
 
-    //если найден,то
-    //1)генерируем проль для отправки
 
-    $activeCode = rand(1000, 9999);
-    //  $this->sendSMS($user->phone,$activeCode);
-    // $activeCode=1111;
-    //2) отправляем его в смс
-    App::call('App\Http\Controllers\GirlsController@sendSMS', [$user->phone, $activeCode]);
-
-    //теперь запишем его в БД
-    DB::update('update users set smsResetCode = ? where id = ?', [$activeCode, $user->id]);
-
-
-    return Response::json(['result' => 'ok']);
-}
-);
-
-Route::get('/sendSMS2', function () {
-    $phone = Input::get('phone');
-
-    $user = collect(DB::select('select * from users where phone like ?', [$phone]))->first();
-    //   dump($user);
-    if ($user != null and $user->phone_conferd == 1) {
-        //echo 'Phone alredy exist!';
-        return Response::json(['result' => 'alredy']);
-    }
-
-    $user = Auth::user();
-    //если найден,то
-    //1)генерируем проль для отправки
-
-    $user->phone = $phone;
-    $activeCode = rand(1000, 9999);
-    $user->actice_code = $activeCode;
-    $user->save();
-
-    //2) отправляем его в смс
-    App::call('App\Http\Controllers\GirlsController@sendSMS', [$phone, $activeCode]);
-
-    return Response::json(['result' => 'ok']);
-}
-);
-
-Route::get('/sendCODE2', function () {
-    $code = Input::get('code');
-
-    $user = Auth::user();
-    if ($user->phone_conferd == 1) {
-        return Response::json(['result' => 'alredy']);
-    }
-    if ($code == $user->actice_code) {
-        $user->phone_conferd = 1;
-        $user->save();
-        return Response::json(['answer' => 'ok']);
-    } else {
-        return Response::json(['result' => 'fail']);
-    }
-}
-);
-
-
-//
-Route::get('/sendCODE', function () {
-    $code = Input::get('code');
-    $phone = Input::get('phone');
-    $user = User::select(['id', 'name', 'smsResetCode', 'email'])
-        ->where('phone', '=', $phone)
-        ->first();
-    if ($code == $user->smsResetCode) {
-        $token = str_random(16);
-        DB::table('users')->where('id', $user->id)->update(['email_token' => $token]);
-        return Response::json(['andwer' => 'ok', 'token' => $token]);
-    } else {
-        return Response::json(['result' => 'fail']);
-    }
-    return Response::json(['result' => 'ok']);
-}
-);
-
-//отправка sms сброса
-Route::post('/resetPasswordSMS', 'GirlsController@resetPassSMS')->name('ResetPassSMS');
-
-
-//тут для работы с анкетой за деньги
-Route::get('/firtPlase/{id}', 'GirlsController@toFirstPlace')->name('TofirstPlase');
-Route::post('/toTop/', 'GirlsController@toTop')->name('ToTop');
-
-Route::get('/testmail', 'GirlsController@testMail');
-
-
-// для администратора
-Route::get('/adminPanel', 'AdminController@getAdminPanel')->name('adminPanel')->middleware('auth');;
-Route::post('/SetPriceToFirstPlase/',
-    'AdminController@SetPriceToFirstPlase')->name('SetToFirstPlase')->middleware('auth');;
-Route::post('/SetPriceToTop/', 'AdminController@SetPriceToTop')->name('SetToTopPrice')->middleware('auth');;
-
-
-//почта
-Route::get('/testmail', 'GirlsController@testemail');
-
-
-Route::get('/confirnEmail', 'GirlsController@MailtoConfurn')->name('sendConfurmEmail');
-
-Route::get('/user/confernd/{token}', 'GirlsController@conferndEmail')->name('conferndEmail');
-
-//смс
-Route::get('/sms', 'GirlsController@sendSmsTest');
-
-//ввод номера телефона
-Route::get('/inputphone', function () {
-    return view('inputphone');
-})->name('inputMobile');
-
-Route::post('/inputPhone', 'GirlsController@inputPhone')->name('inputMobilePhone');
-Route::post('/inputCode', 'GirlsController@inputActiveCode')->name('inputActiveCode');
-
-//тут путь для правил
-Route::get('/rules', function () {
-    return view('rules');
-})->name('rules')->middleware('auth');;
-Route::post('/rules2', 'GirlsController@akceptRules')->name('aceptRules');
-
-
-Route::get('/user/anketa/edit/', 'AnketController@girlsEditAuchAnket')->name('girlsEditAuchAnket')->middleware('auth');;
-Route::post('/user/anketa/edit/', 'AnketController@edit')->name('girlsEdit');
-
-//бот
-Route::get('/bot', 'GirlsController@bot')->name('bot');
-
-//галерея
-Route::get('/galeray', 'AnketController@galarayView')->name('galeray')->middleware('auth');;
-Route::get('/image/delete/{image}', 'AnketController@deleteimage')->name('deleteImage')->middleware('auth');;
-Route::get('/image/private/delete/{image}',
-    'AnketController@deletePrivateImage')->name('deletePrivateImage')->middleware('auth');;
-Route::post('/image/upload', 'AnketController@uploadimage')->name('uploadImage')->middleware('auth');;
-Route::post('/image/pravate/upload',
-    'AnketController@uploadPrivateimage')->name('uploadPrivateImage')->middleware('auth');;
-Route::post('/image/main/upload', 'GirlsController@uploadMainimage')->name('uploadMainImage')->middleware('auth');;
-
-Route::get('/message', 'MessagesController@GetMessagesPage')->middleware('auth');;
-
-Route::get('/cityes', 'GirlsController@getSearch');
-
-//for dropdown
-Route::get('/prodview', 'TestController@prodfunct');
-Route::get('/findProductName', 'TestController@findProductName');
-Route::get('/findPrice', 'TestController@findPrice');
-
-//Route::get('/findRegions/{id}','GirlsController@findRegions');
-Route::get('/findRegions', function () {
-    $id = Input::get('country_id');
-    $regions = Region::where('id_country', '=', $id)
-        ->orderBy('id')
-        ->get();
-    //dump($regions);
-
-    return Response::json($regions);
-}
-);
-
-Route::get('/findCitys', function () {
-    $id = Input::get('region_id');
-
-    /*  $city=collect(DB::select('select * from city where id_region=?',
-      [$id]));*/
-    $city = City::where('id_region', '=', $id)
-        ->orderBy('id')
-        ->get();
-
-    return Response::json($city);
-});
-
-Route::get('/findCitys2', function () {
-    $id = Input::get('region_id');
-    //  dump($id);
-    $region = collect(DB::select('select * from regions where id_region=?',
-        [$id]));
-    //   dump($region);
-    $city = collect(DB::select('SELECT * FROM `cities` WHERE `id_region`=? ',
-        [$id]));
-    //   dump($city);
-    return Response::json($city);
-});
-
-Route::get('/inputPhone2', function () {
-    $serveses = null;
-    //   echo 'test';
-    $user = Auth::user();
-    if (Auth::guest()) {
-        return redirect('/login');
-    }
-    $girl = Girl::select([
-        'name',
-        'email',
-        'password',
-        'id',
-        'phone',
-        'description',
-        'enabled',
-        'payday',
-        'payed',
-        'login',
-        'main_image',
-        'sex',
-        'meet',
-        'weight',
-        'height',
-        'age'
-    ])
-        ->where('user_id', $user->id)->first();
-    if ($girl != null) {
-        $rewest = new Request();
-        return $this->girlsShowAuchAnket($rewest);
-    };
-    if (Auth::guest()) {
-        return redirect('/login');
-    }
-    if ($user->akcept == 0) {
-        return view('rules');
-    }
-
-    if ($user->is_conferd == 0) {
-        return view('conferntEmail')->with(['email' => $user->email]);
-    }
-
-    if ($user->phone == null) {
-        return view('inputphone2');
-    }
-    if ($user->phone_conferd == 0) {
-        return view('inputphone2');
-    }
-    if ($girl != null) {
-        return $this->index();
-    }
-    $phone = $user->phone;
-    $countries = collect(DB::select('select * from countries')); //получаем города
-    //получили цену
-    $title = "Создание анкеты";
-    return view('createGirl')->with([
-            'servises' => $serveses,
-            'title' => $title,
-            'phone' => $phone,
-            'countries' => $countries
-        ]
-    )->name('inputMobilePhone2');
-
-});
-
-Route::get('/inpotMobilePhoneAjax', function () {
-    $phone = Input::get('phone');
-    $ansver = "test";
-    return Response::json($ansver);
-});;
-
-//тестирование верстки
-Route::get('/bladetest', function () {
-    return view('bladetest');
-})->name('bladetest');
-
-//поиск анкет
-Route::post('/search', 'GirlsController@search')->name('search');
-Route::get('/reset', 'GirlsController@index2')->name('reset');
-
-//действия адмиистратора с анкетой
-Route::post('/admin-to-girl/', 'MessagesController@adminToGirl')->name('adminToGirl');
-Route::post('/gitl-to-admin/', 'MessagesController@girlToAdmin')->name('girlToAdmin');
-
-
-//сообщения
-Route::get('/messages', 'MessagesController@getMessagePage')->name('MessagePage')->middleware('auth');;
-Route::get('/messages/{girl_id}',
-    'MessagesController@getMessagePageAdmin')->name('MessagePageAdmin')->middleware('auth');;
-
-Route::get('/usersList', 'AdminController@usersList')->name('usersList')->middleware('auth');;
-Route::get('/messageList', 'MessagesController@messagesList')->name('messageList')->middleware('auth');;
-Route::get('/moneyHistory', 'AdminController@moneyHistory')->name('moneyHistory')->middleware('auth');;
-
-//custom user
-//Route::get('/custom', 'CustomUserController@index')->name('custom');
 Route::get('/join/', 'CustomUserController@index')->name('join');
 Route::post('/join/new', 'CustomUserController@join')->name('joinStore');
 Route::get('/continion/', 'AnketController@createGirl')->name('continion');
 
-//приватный доступ
-//makePrivateRequwest
-Route::get('/privateRequwest/{id}', 'PrivateController@makeRequwest')->name('makePrivateRequwest')->middleware('auth');;
+//редактировать анке
+Route::get('/edit', 'AnketController@girlsEditAuchAnket')->name('girlsEditAuchAnket')->middleware('auth');;
+Route::post('/user/anketa/edit/', 'AnketController@edit')->name('girlsEdit');
 
-//просмотр отправденныъ запросов
-Route::get('/requwestForMe', 'PrivateController@requwestForMe')->name('requwestForMe')->middleware('auth');;
+//обновление главной фотографии
+Route::post('/updateMainImage', 'AnketController@updateMainImage')->name('updateMainImage');
+Route::get('/getmainImage', 'AnketController@getmainimage')->middleware('auth');
+//получаем обычные фотографии
+Route::get('/getImages', 'AnketController@getImages')->middleware('auth');
+//загрузить обычнае фотографии
+Route::post('/updateGalerayImage', 'AnketController@updateGalerayImage')->middleware('auth');
 
-//предоставить доступ
-Route::get('/makeAccess/{id}', 'PrivateController@makeAccess')->name('makeAccess')->middleware('auth');;
+//удалить фотографию
+Route::get('/deleteImage', 'AnketController@deleteImage')->middleware('auth');
 
-Route::get('/denadeAccess/{id}', 'PrivateController@denideAccess')->name('denideAccess')->middleware('auth');;
+//приватные фотографии
+Route::get('/getPrivateImages', 'AnketController@getPrivateImages')->middleware('auth');
+
+Route::post('/updatePrivateGalerayImage', 'AnketController@updatePrivateGalerayImage')->middleware('auth');
+
+Route::get('/deletePrivateImage', 'AnketController@deletePrivateImage')->middleware('auth');
+
+Route::get('/power', function () {
+    return view('power');
+})->middleware('auth');
 
 
-Route::get('/whoMakeSeeMyAnket', 'PrivateController@whoMakeSeeMyAnket')->name('whoMakeSeeMyAnket')->middleware('auth');;
+//олучаем состояние счета
+Route::get('/getMoney', 'MoneyController@getCurrentMoney')->middleware('auth');
 
-Route::get('/clouseAccess/{id}', 'PrivateController@clouseAccess')->name('clouseAccess')->middleware('auth');;
+//путь для яндекса
+Route::post('/yandex', 'MoneyController@reciverMoney');
 
-Route::get('/rules', function () {
-    return view("rules");
+//получить цены
+Route::get('/getpricestotop', 'MoneyController@getpricestotop')->middleware('auth');
+
+Route::get('/tofirstplaсe', 'MoneyController@toFirstPlase')->middleware('auth');
+
+Route::get('/totop', 'MoneyController@totop')->middleware('auth');
+
+
+//получаем картинки для карусели
+Route::get('/getdataforcarousel', 'AnketController@getdataforcarousel');
+
+
+//ути администратора
+Route::group(['middleware' => 'admin'], function () {
+    Route::get('/admin', 'AdminController@adminPanel')->name('adminPanel');
+    Route::get('/presentsControll', function () {
+        return view('admin.presentsControl');
+    })->name('presentsControll');
+
 });
 
-//тут чат
-Route::get('/chat', 'ChatController@index');
-Route::get('/getAllMyMessages', 'ChatController@getAllMyMessages');
-Route::get('/getUserMessages/{id}', 'ChatController@getMyMessages');
-//отправка сообщения
-Route::post('/sendChatMessage','ChatController@sendMyMessages');
+Route::get('/getpresents', 'PresentController@getpresents');
+
+Route::post('/createpresent', 'PresentController@storepresent');
+
+Route::post('/delpresent', 'PresentController@delpresent')->middleware('auth');
+
+//подарить подарок
+Route::post('/givepresent', 'PresentController@givepresent')->middleware('auth');
+
+Route::get('/presenttest', 'PresentController@presenttest');
+
+//счетчик подаркоа
+Route::get('/getCountUnreadedPresents', 'PresentController@getCountUnreaderPresents')->middleware('auth');
+
+//мои подарки
+Route::get('mypresents', function () {
+    return view('presents.mypresents');
+}
+
+//получение списка моих подарко
+)->middleware('auth');
+Route::get('/getpresentsforMe', 'PresentController@presentsForMe')->middleware('auth');
+
+Route::get('/getpresentsHistoryforMe', 'PresentController@getpresentsHistoryforMe')->middleware('auth');
 
 
+Route::get('/getpresentsFromMe', 'PresentController@getpresentsFromMe')->middleware('auth');
 
-Route::get('messagesChat', 'ChatController@fetchMessages');
-Route::post('messagesChat', 'ChatController@sendMessage');
+//markpresentasreaded
+Route::post('/markpresentasreaded', 'PresentController@markpresentasreaded')->middleware('auth');
+
+//
+Route::get('/getDataForChangeMainImage', 'AnketController@getDataForChangeMainImage')->middleware('auth');;
+
+//получаем id пользователя по
+
+//SMS
+Route::get('/sendSMS2', function () {
+    $phone = Input::get('phone');
+    $user = collect(DB::select('select * from users where phone like ?', [$phone]))->first();
+    //   dump($user);
+    if ($user != null and $user->phone_conferd == 1) {
+        //echo 'Phone alredy exist!';
+        return response()->json(['result' => 'alredy']);
+    }
+    $user = Auth::user();
+    //если найден,то
+    //1)генерируем проль для отправки
+    $user->phone = $phone;
+    $activeCode = rand(1000, 9999);
+    $user->actice_code = $activeCode;
+    $user->save();
+    //2) отправляем его в смс
+  //  App::call('App\Http\Controllers\GirlsController@sendSMS', [$phone, $activeCode]);
+
+    return response()->json(['result' => 'ok']);
+}
+);
+Route::get('/sendCODE2', function () {
+    $code = Input::get('code');
+    $user = Auth::user();
+    if ($user->phone_conferd == 1) {
+        return response()->json(['result' => 'alredy']);
+    }
+    if ($code == $user->actice_code) {
+        $user->phone_conferd = 1;
+        $user->save();
+
+        return response()->json(['answer' => 'ok']);
+    } else {
+        return response()->json(['result' => 'fail']);
+    }
+}
+);

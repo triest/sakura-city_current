@@ -7,19 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     //
-    protected $fillable = [
-        'id',
-        'text',
-        'girl_id',
-        'fromAdmin',
-        'date',
-        'readed',
-        'adminreaded'
-    ];
+    protected $guarded = [];
 
-
-    public function who()
+    public function fromContact()
     {
-        return $this->belongsTo('App\User');
+        return $this->hasOne(User::class, 'id', 'from');
     }
 }
