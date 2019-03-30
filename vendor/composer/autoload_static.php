@@ -474,6 +474,7 @@ class ComposerStaticInit6ce0545ea99d6559a0cbf95b2202d8cf
         'App\\Http\\Controllers\\MoneyController' => __DIR__ . '/../..' . '/app/Http/Controllers/MoneyController.php',
         'App\\Http\\Controllers\\PresentController' => __DIR__ . '/../..' . '/app/Http/Controllers/PresentController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
+        'App\\Http\\Middleware\\AnketExist' => __DIR__ . '/../..' . '/app/Http/Middleware/AnketExist.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',

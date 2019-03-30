@@ -70,7 +70,7 @@ class ContactsController extends Controller
         $message = Message::create([
             'from' => auth()->id(),
             'to' => $request->contact_id,
-            'text' => $request->text
+            'text' => $request->text,
         ]);
 
         $user = Auth::user();
@@ -92,6 +92,7 @@ class ContactsController extends Controller
             $dialog4->save();
         }
         broadcast(new NewMessage($message));
+
         return response()->json($message);
     }
 
@@ -233,10 +234,11 @@ class ContactsController extends Controller
             ->where('my_id', $auth->id)
             ->where('other_id', $id)
             ->first();
-        $private = collect($private);
-
-        // dump($private);
-        return $private;
+        if ($private == null) {
+            return response()->json('false');  //
+        } else {
+            return response()->json('true');
+        }
     }
 
     public function sendornot(Request $request)
@@ -310,6 +312,19 @@ class ContactsController extends Controller
         DB::table('requwest')->where('who_id', '=', $id)->where('target_id', $auth->id)->delete();
 
         return response()->json('ok');
+    }
+
+    public function getUserID(Request $request)
+    {
+        $id = $request->input('id');
+        //dump($id);
+        $girl = Girl::select('id', 'user_id')->where('id', $id)->first();
+        if ($girl != null) {
+            return \response()->json($girl->user_id);
+        } else {
+            return null;
+        }
+        // return  response()->json($id);
     }
 
 

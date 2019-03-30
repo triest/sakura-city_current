@@ -57,6 +57,7 @@ class GirlsController extends Controller
             'city_id',
             'banned',
             'user_id',
+            'status',
         ])->where('id', $id)->first();
         if ($girl == null) {
             return $this->index();
@@ -100,8 +101,51 @@ class GirlsController extends Controller
             'girl' => $girl,
             'images' => $images,
             'privatephotos' => $privatephoto,
-            'targets' => $targets
+            'targets' => $targets,
         ]);
     }
 
+    public function inputPhone(Request $request)
+    {
+        $validatedData = $request->validate([
+            'phone' => 'required|numeric|min:11|unique:users',
+        ]);
+
+        $phone = $request->phone;
+        $user = collect(DB::select('select * from users where phone like ?', [$phone]))->first();
+        //   dump($user);
+        if ($user != null and $user->phone_conferd == 1) {
+            //echo 'Phone alredy exist!';
+            return response()->json(['result' => 'alredy']);
+        }
+        $user = Auth::user();
+        //если найден,то
+        //1)генерируем проль для отправки
+        $user->phone = $phone;
+        $activeCode = rand(1000, 9999);
+        $user->active_code = $activeCode;
+        $user->save();
+        //2) отправляем его в смс
+        //  App::call('App\Http\Controllers\GirlsController@sendSMS', [$phone, $activeCode]);
+        return response()->json(['result' => 'ok']);
+    }
+
+
+    public function inputCode(Request $request)
+    {
+        $validatedData = $request->validate([
+            'code' => 'required|numeric|min:11',
+        ]);
+
+        $inputCode = $request->code;
+        $user = Auth::user();
+        if ($user->active_code == $inputCode) {
+            $user->phone_confirmed=1;
+            $user->save();
+            return response()->json(['result' => 'ok']);
+        }
+        else{
+            return response()->json(['result' => 'wrongCode']);
+        }
+    }
 }

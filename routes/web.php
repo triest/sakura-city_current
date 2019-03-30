@@ -16,10 +16,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Auth::routes();
@@ -38,7 +34,7 @@ Route::get('/join/', 'CustomUserController@index')->name('join');
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/anket', 'GirlsController@index')->name('main');
 Route::get('/createAnketPage', 'AnketController@createGirl')->name('createGirlPage')->middleware('auth');
@@ -200,7 +196,7 @@ Route::get('/sendSMS2', function () {
     $user->actice_code = $activeCode;
     $user->save();
     //2) отправляем его в смс
-  //  App::call('App\Http\Controllers\GirlsController@sendSMS', [$phone, $activeCode]);
+    //  App::call('App\Http\Controllers\GirlsController@sendSMS', [$phone, $activeCode]);
 
     return response()->json(['result' => 'ok']);
 }
@@ -221,3 +217,16 @@ Route::get('/sendCODE2', function () {
     }
 }
 );
+
+Route::get('/myAnket', 'AnketController@myAnket')->name("myAnket")->middleware('auth', 'anketExist');
+
+Route::get('/getMyAnketData', 'AnketController@getMyAnketData')->middleware('auth', 'anketExist');
+
+Route::get('/getTopPhotos', 'AnketController@getTopPhotos')->middleware('auth', 'anketExist');
+
+Route::get('/getuserid', 'ContactsController@getUserID');
+
+//
+Route::post('/inputPhone','GirlsController@inputPhone')->middleware('auth');
+
+Route::post('/inputCode','GirlsController@inputCode')->middleware('auth');

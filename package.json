@@ -12,6 +12,7 @@
   "devDependencies": {
     "axios": "^0.18",
     "bootstrap": "^4.0.0-beta",
+    "cross-env": "^5.1",
     "jquery": "^3.2",
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.5",
@@ -24,7 +25,6 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0-beta",
-    "node8 node_modules/cross-env/dist/bin/cross-env.js": "^5.2.0",
     "popper.js": "^1.14.7",
     "vue-carousel": "^0.18.0-alpha",
     "vue-v-carousel": "0.0.4"

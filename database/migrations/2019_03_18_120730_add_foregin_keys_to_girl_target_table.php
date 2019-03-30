@@ -14,7 +14,7 @@ class AddForeginKeysToGirlTargetTable extends Migration
     public function up()
     {
         Schema::table('girl_target', function (Blueprint $table) {
-         //   $table->foreign('girl_id')->references('id')->on('girls');
+            $table->foreign('girl_id')->references('id')->on('girls');
             $table->foreign('target_id')->references('id')->on('target');
         });
     }

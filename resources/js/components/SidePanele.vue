@@ -8,7 +8,7 @@
             <div v-if="numberApplication>0">+{{numberApplication}}</div>
         </a>
         </b>
-        <b><a href="/edit">Редактирование анкеты</a> </b><br>
+
         <b><a href="/editimages">Редактирование галлереи</a> </b><br>
         <b><a class="btn btn-primary" href="/power">Поднять анкету</a> </b><br><br>
         <b><a class="btn btn-info" href="/mypresents">Мои подарки</a> </b>

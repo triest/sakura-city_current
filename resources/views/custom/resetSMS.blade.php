@@ -9,7 +9,7 @@
                     номера телефона. Приме:79001234567</label>
                 <input type="tel" class="form-control" id="phone" name="phone" onkeypress="return isNumber(event)"
                        required></input>
-                <a class="button green" id="sendSMS">Отправить SMS</a><br>
+                <button class="btn-primary" id="sendSMS">Отправить SMS</button><br>
                 <label>Введите код</label>
                 <input type="text" class="form-control" id="code" name="code" onkeypress="return isNumber(event)"
                        required></input>

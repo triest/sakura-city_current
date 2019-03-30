@@ -15,8 +15,8 @@ class CreateGirlTargetTable extends Migration
     {
         Schema::create('girl_target', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('girl_id')->nullable()->unsigned()->index();
-            $table->integer('target_id')->nullable()->unsigned()->index();
+            $table->integer('girl_id')->unsigned()->index();
+            $table->integer('target_id')->unsigned()->index();
         });
     }
 

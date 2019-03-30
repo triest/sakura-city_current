@@ -52,7 +52,8 @@
         mounted() {
             this.getNewPresentsForMe(),
                 this.getNewPresentsHistory(),
-                this.getNewPresentsFromMe()
+                this.getNewPresentsFromMe(),
+                this.currentTab='new';
         },
         data() {
             return {

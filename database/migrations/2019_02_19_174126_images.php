@@ -14,7 +14,7 @@ class Images extends Migration
     public function up()
     {
         //
-        Schema::create('photos', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->nullable()->unsigned()->index();
             $table->string('photo_name', 191)->nullable();

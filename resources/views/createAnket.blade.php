@@ -141,7 +141,8 @@
                placeholder="Фотографии"
                multiple>
         <br>
-
         <button type="submit" class="btn btn-default">Создать анкету</button>
     </form>
+    <br><br>
+    <a class="btn btn-primary" href="{{route('main')}}" role="link" onclick=" relocate_home()">К списку анкет</a>
 @endsection

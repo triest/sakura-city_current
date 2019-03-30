@@ -38,7 +38,7 @@ class CustomUserController extends Controller
     public function join(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'you' => 'required',
@@ -52,6 +52,6 @@ class CustomUserController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
         Auth::loginUsingId($user->id);
-        return view('custom.resetSMS');
+        return view('custom.resetSMS2');
     }
 }

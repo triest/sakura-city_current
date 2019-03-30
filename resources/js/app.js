@@ -56,13 +56,17 @@ Vue.component('mypresents', require('./components/MyPresents.vue').default);
 //Vue.component('modal', require('./components/ModalComponent.vue'));
 Vue.component('delmodal', require('./components/delModal.vue').default);
 
+
+Vue.component('myanket', require('./components/myAnket.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('edit', require('./components/Edit.vue').default);
 
+Vue.component('phonecomponent', require('./components/phoneComponent.vue').default);
 
 const app = new Vue({
     el: '#app',
@@ -92,6 +96,13 @@ const app4 = new Vue({
     }
 });
 
+const privateApp = new Vue({
+    el: '#privateApp',
+    data: {
+        showModal: false
+    }
+});
+
 const app7 = new Vue({
     el: '#app7',
     data: {
@@ -108,6 +119,20 @@ const applicationClass = new Vue({
 
 const powerApp = new Vue({
     el: '#powerApp',
+    data: {
+        showModal: false
+    }
+});
+
+const myAnket = new Vue({
+    el: '#myAnketApp',
+    data: {
+        showModal: false
+    }
+});
+
+const phoneApp = new Vue({
+    el: '#phoneApp',
     data: {
         showModal: false
     }

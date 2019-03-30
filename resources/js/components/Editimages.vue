@@ -11,7 +11,7 @@
             <div v-if="currentTab == 'main'">
                 <p class="h3">Главная фотография:</p>
                 <p v-if="mainImage!=null">
-                    <img :src="'public/images/upload/'+mainImage" height="150">
+                    <img :src="'images/upload/'+mainImage" height="150">
                 </p>
                 <div class="container">
                     <b>Обновить главныю фотографию в Вашей анкете всего за {{priceChangeMainImage}} рублей!</b>

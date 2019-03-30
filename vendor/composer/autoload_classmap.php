@@ -29,6 +29,7 @@ return array(
     'App\\Http\\Controllers\\MoneyController' => $baseDir . '/app/Http/Controllers/MoneyController.php',
     'App\\Http\\Controllers\\PresentController' => $baseDir . '/app/Http/Controllers/PresentController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
+    'App\\Http\\Middleware\\AnketExist' => $baseDir . '/app/Http/Middleware/AnketExist.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
     'App\\Http\\Middleware\\CheckForMaintenanceMode' => $baseDir . '/app/Http/Middleware/CheckForMaintenanceMode.php',
     'App\\Http\\Middleware\\EncryptCookies' => $baseDir . '/app/Http/Middleware/EncryptCookies.php',

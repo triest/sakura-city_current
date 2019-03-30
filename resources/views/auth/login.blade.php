@@ -1,4 +1,4 @@
-@extends('layouts.welcome')
+@extends('layouts.app')
 
 @section('content')
     <div class="container">
@@ -57,12 +57,12 @@
                         <button type="submit" class="btn btn-primary">
                             Войти
                         </button>
-
                         @if (Route::has('password.request'))
                             <button class="btn btn-secondary" href="{{ route('password.request') }}">
                                 Забыли пароль?
                             </button>
                         @endif
+                        <a class="btn btn-secondary" href="{{route('main')}}" role="link">К списку анкет</a>
                     </div>
                 </div>
             </form>
